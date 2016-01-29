@@ -14,6 +14,9 @@ public class InputHandler : MonoBehaviour {
         Width = _Map.GetComponent<StartGrid>().Width;
         Height = _Map.GetComponent<StartGrid>().Height;
 
+        TileP1 = new Vector2(0, (int)(Height - 1) / 2);
+        TileP2 = new Vector2(Width - 1, (int)(Height - 1) / 2);
+
     }
 	
 	// Update is called once per frame
@@ -21,7 +24,7 @@ public class InputHandler : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.W))
         {
 
-            TileP1.y = Mathf.Min(TileP1.y + 1, Height);
+            TileP1.y = Mathf.Min(TileP1.y + 1, Height-1);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
@@ -38,13 +41,13 @@ public class InputHandler : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.D))
         {
 
-            TileP1.x = Mathf.Min(TileP1.x + 1, Width);
+            TileP1.x = Mathf.Min(TileP1.x + 1, Width-1);
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
 
-            TileP2.y = Mathf.Min(TileP2.y + 1, Height);
+            TileP2.y = Mathf.Min(TileP2.y + 1, Height-1);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -61,7 +64,7 @@ public class InputHandler : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
 
-            TileP2.x = Mathf.Min(TileP2.x + 1, Width);
+            TileP2.x = Mathf.Min(TileP2.x + 1, Width-1);
         }
     }
 }
