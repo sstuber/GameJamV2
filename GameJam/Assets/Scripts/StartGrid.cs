@@ -2,16 +2,21 @@
 using System.Collections;
 
 public class StartGrid : MonoBehaviour {
-    public GameObject tile;
-    GameObject[,] Grid = new GameObject[16, 16];
+    public GameObject _tile;
+    public 
+    TileHandler tile;
+    public int Height, Width;
+    public GameObject[,] Grid;
     // Use this for initialization
     void Start()
     {
-        Grid = new GameObject[16, 16];
-        for (int i = 0; i < 16; i++)
-            for (int j = 0; j < 16; j++)
-            { Grid[i, j] = Instantiate(tile);
-                Grid[i, j].transform.position = new Vector3(i, j) + tile.transform.position;
+ 
+        tile = _tile.GetComponent<TileHandler>();
+        Grid = new GameObject[Width, Height];
+        for (int y = 0; y < Height; y++)
+            for (int x = 0; x < Width; x++)
+            { Grid[x, y]= Instantiate(_tile);
+                Grid[x, y].transform.position = new Vector3(x, y)* tile.scale + transform.position;
             }
     }
 	
