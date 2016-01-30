@@ -180,7 +180,8 @@ public class InfluenceController : MonoBehaviour {
                     }
                     if (dong.TileType == BTT.plateau)
                         importance += 4;
-
+                    if (dong.GetSpecialProp(0) == true)
+                        importance += 2000;
                     if (Mathf.Abs(ix) + Mathf.Abs(iy) == 2)
                         importance *= 1.4f;
 

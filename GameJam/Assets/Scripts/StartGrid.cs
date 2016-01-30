@@ -36,13 +36,14 @@ public class StartGrid : MonoBehaviour {
     public InfluenceController ic;
     private GameObject icgo;
     private AudioSource source;
-    private AudioSource source2;
+    
     // Use this for initialization
     void Awake()
     {
-        AudioSource[] audio = GetComponents<AudioSource>();
-        source = audio[0];
-        source2 = audio[1];
+        source = GetComponent<AudioSource>();
+        source.clip = rain;
+        
+        
         gameObject.AddComponent<InfluenceController>();
         gameObject.GetComponent<InfluenceController>().sg = this;
         gameObject.GetComponent<InfluenceController>().tile = InflTile;
@@ -189,15 +190,18 @@ public class StartGrid : MonoBehaviour {
             {
             case 0: // place stone move
                 {
-                    if (PlayerHandler.manaCount > 100)
-                    {
-                        Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
-                        PlayerHandler.manaCount -= 100;
-                    }
-                    else
-                    { } // go fuck your self u sun of a beach
-                    break;
-                    
+                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
+
+                    gameObject.AddComponent<Rigidbody2D>();
+                    gameObject.AddComponent<CircleCollider2D>();
+                    var rb = GetComponent<Rigidbody2D>();
+                    rb.mass = 10000000;
+                    rb.drag = 10000000;
+                    rb.gravityScale = 0;
+                    var cc = GetComponent<CircleCollider2D>();
+                    cc.radius = 0.35f;
+                    cc.offset = new Vector2(startPoint.x * StartGrid.tileScale, startPoint.y * StartGrid.tileScale);     
+                    break;    
                 }
             case 4:
                 {
@@ -302,7 +306,7 @@ public class StartGrid : MonoBehaviour {
                     int k = (Random.Range(0, tempList.Count));
 
                     //source2.Stop();
-                    source2.PlayOneShot(source2.clip);
+                    source.PlayOneShot(thunder);
                     lightning.transform.position = gameObject.transform.position + (new Vector3(tempList[k].x, tempList[k].y, 0) * tileScale);
                     lightning.GetComponent<ParticleSystem>().Play();
                     //DO DAMAGE TO TILE

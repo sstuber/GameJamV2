@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player1Mana : MonoBehaviour {
 
-    public float max_Mana = 500f;
+    public float max_Mana = 100f;
     public float cur_Mana = 0f;
     public GameObject manaBar;
     public float ManaRegen;
