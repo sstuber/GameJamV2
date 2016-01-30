@@ -28,6 +28,8 @@ public class InfluenceController : MonoBehaviour {
 
         for(int y = 0; y < sg.Height; ++y){
             for (int x = 0; x < sg.Width; ++x) {
+                if (sg.Grid[x, y] == null)
+                    print("obj stuff" + x + " " + y);
                 GameObject newTile = (GameObject)Instantiate(tile, sg.Grid[x,y].transform.position, Quaternion.identity);
                 tiles[x, y] = newTile;
                 tiles[x, y].transform.localScale *= StartGrid.tileScale;
