@@ -19,6 +19,10 @@ public class StartGrid : MonoBehaviour {
     public GameObject lightning;
     public AudioClip rain;
     public AudioClip thunder;
+    public AudioClip river;
+    public AudioClip forest;
+    
+    public AudioClip rock;
 
     public GameObject rainMaker;
     public GameObject _tile;
@@ -191,7 +195,7 @@ public class StartGrid : MonoBehaviour {
             case 0: // place stone move
                 {
                     Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
-
+                    source.PlayOneShot(rock);
                     gameObject.AddComponent<Rigidbody2D>();
                     gameObject.AddComponent<CircleCollider2D>();
                     var rb = GetComponent<Rigidbody2D>();
@@ -233,6 +237,7 @@ public class StartGrid : MonoBehaviour {
                 }
             case 6: // Change area to forest
                 {   // startpoint is the tile in the middle
+                    source.PlayOneShot(forest);
                     for (int x = (int)startPoint.x - 1; x <= startPoint.x + 1; x++)
                         for (int y = (int)startPoint.y - 1; y <= startPoint.y + 1; y++)
                         {
