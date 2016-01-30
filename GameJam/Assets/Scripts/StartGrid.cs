@@ -19,6 +19,8 @@ public class StartGrid : MonoBehaviour {
 
     public GameObject rainMaker;
     public GameObject _tile;
+    public GameObject InflTile;
+
     List<Vector2> pastVectors;
     TileHandler tile;
     public int Height, Width;
@@ -28,10 +30,14 @@ public class StartGrid : MonoBehaviour {
     public float amountOfTimeItIsRaining;
     float rainTimer = 0;
     public static float tileScale;
+    public InfluenceController ic;
+    private GameObject icgo;
     // Use this for initialization
-    void Start()
+    void Awake()
     {
-        
+        gameObject.AddComponent<InfluenceController>();
+        gameObject.GetComponent<InfluenceController>().sg = this;
+        gameObject.GetComponent<InfluenceController>().tile = InflTile;
         tile = _tile.GetComponent<TileHandler>();
         Grid = new GameObject[Width, Height];
         prevGrid = new GameObject[Width, Height];
@@ -42,8 +48,9 @@ public class StartGrid : MonoBehaviour {
                 prevGrid[x, y] = Grid[x, y];
             }
         tileScale = tile.scale;
-        GenerateForest(3);
+        GenerateForest(5);
         //GenerateRivers();
+        GeneratePlateau(5);
         bollie = true;
         while (bollie)
         {
@@ -109,6 +116,17 @@ public class StartGrid : MonoBehaviour {
         }
 	}
     #region mapgeneration
+    void GeneratePlateau(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 startPoint = new Vector2((int)Random.Range(0, (Width - 1)), (int)Random.Range(0, (Height - 1)));
+            print(startPoint);
+            Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.plateau);
+            pastVectors = new List<Vector2>();
+            SpreadTiles(startPoint, BTT.plateau, 1.3f);
+        }
+    }
     void GenerateForest(int amount)
     {
         for (int i = 0; i < amount; i++)
@@ -118,7 +136,7 @@ public class StartGrid : MonoBehaviour {
             Vector2 startPoint = new Vector2((int)Random.Range(0, (Width - 1)), (int)Random.Range(0, (Height - 1)));
             Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.bos);
             pastVectors = new List<Vector2>();
-            SpreadTiles(startPoint, BTT.bos, 0.8f);
+            SpreadTiles(startPoint, BTT.bos, 1.1f);
            /* for (int x = (int)startPoint.x -1; x <= startPoint.x +1; x++)
                 for (int y = (int)startPoint.y-1; y <= startPoint.y +1; y++)
                 {
@@ -162,7 +180,13 @@ public class StartGrid : MonoBehaviour {
             {
             case 0: // place stone move
                 {
-                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
+                    if (PlayerHandler.manaCount > 100)
+                    {
+                        Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
+                        PlayerHandler.manaCount -= 100;
+                    }
+                    else
+                    { } // go fuck your self u sun of a beach
                     break;
                     
                 }
