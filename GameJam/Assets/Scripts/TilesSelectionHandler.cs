@@ -21,7 +21,7 @@ public class TilesSelectionHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        P2Selected.transform.position = InputHandler.TileP2*Tile.scale+(Vector2)transform.position;
-        P1Selected.transform.position = InputHandler.TileP1*Tile.scale+(Vector2)transform.position;
+        P2Selected.transform.position = (Vector3)InputHandler.TileP2*Tile.scale+(Vector3)transform.position + new Vector3(0,0,-1);
+        P1Selected.transform.position = (Vector3)InputHandler.TileP1*Tile.scale+(Vector3)transform.position + new Vector3(0, 0, -1);
 	}
 }
