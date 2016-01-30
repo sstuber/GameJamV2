@@ -187,13 +187,13 @@ public class TileHandler : MonoBehaviour {
 
         if (lava && mud)
         {
-            RenderSpecialProperty(-1, false);
+            RenderSpecialProperty(-2, false);
             mud = false;
         }
         
         if (dent && steen && !river)
         {
-            RenderSpecialProperty(-2, false);
+            RenderSpecialProperty(-1, false);
             dent = false;
             steen = false;
         }
@@ -224,7 +224,7 @@ public class TileHandler : MonoBehaviour {
 
             else if (this.mud)
             {
-                RenderSpecialProperty(-1, false);
+                RenderSpecialProperty(-2, false);
                 this.mud = false;
             }
         }
@@ -251,10 +251,16 @@ public class TileHandler : MonoBehaviour {
         else if (this.river && !rain)
         {
             if (dent && steen)
-                RenderSpecialProperty(-2, true);
-            else if (dent){
+            {
+                dent = false;
+                steen = false;
+                RenderSpecialProperty(-1, true);
+            }
+            else if (dent)
+            {
                 //RenderSpecialProperty(-2, true);
-                RenderSpecialProperty(4, true);}
+                RenderSpecialProperty(4, true);
+            }
             else if (steen)
             {
                 //RenderSpecialProperty(-2, true);
