@@ -24,4 +24,27 @@ public class StartGrid : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    void GenerateForest(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 startPoint = new Vector2((int)(Random.Range(0, 1) * (Width - 1)), (int)(Random.Range(0, 1) * (Height - 1)));
+
+            for (int x = (int)startPoint.x -1; x <= startPoint.x +1; x++)
+                for (int y = (int)startPoint.y-1; y <= startPoint.y +1; y++)
+                {
+                    if (Random.Range(0,1) < 0.8)
+                    {
+                        Grid[x, y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.bos);
+                    }
+                }
+
+        }
+
+
+    }
+
+    
+
 }
