@@ -3,23 +3,44 @@ using System.Collections;
 
 public class CiclularProgress : MonoBehaviour {
 	
-	public int timeToComplete = 3;
+	public int ManaRegen = 20;
+    public float i = 0;
 	
 	// Use this for initialization
 	void Start () {
 		//Use this to Start progress
-		StartCoroutine(RadialProgress(timeToComplete));
+        i = 1;
+        gameObject.GetComponent<Renderer>().material.SetFloat("_Progress", i);
 	}
-	
-	IEnumerator RadialProgress(float time)
+
+    void Update()
+    {
+        StartCoroutine(RadialProgress(ManaRegen));
+       // Debug.Log(i);
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            i -= 0.2f;
+            Debug.Log("Decrease Mana");
+            
+        }
+
+        if (i >= 1) i = 1;
+    }
+
+	IEnumerator RadialProgress(float Regen)
 	{
-		float rate = 1 / time;
-		float i = 0;
-		while (i < 1)
-		{
-			i += Time.deltaTime * rate;
-			gameObject.GetComponent<Renderer>().material.SetFloat("_Progress", i);
-			yield return 0;
-		}
+		float rate = 1 / Regen;
+
+        if (i < 1)
+        {
+            i += Time.deltaTime * rate;
+            gameObject.GetComponent<Renderer>().material.SetFloat("_Progress", i);
+
+
+
+            yield return 0;
+        }
+
+
 	}
 }
