@@ -12,73 +12,29 @@ public struct Point
 }
 
 public class StartGrid : MonoBehaviour {
-    float UpdateTime = 0.25f;
-    float UpdateTimer = 0.25f;
-    public GameObject[,] prevGrid;
-    bool bollie;
-
     public GameObject rainMaker;
     public GameObject _tile;
-    public GameObject InflTile;
-
     List<Vector2> pastVectors;
     TileHandler tile;
     public int Height, Width;
     public GameObject[,] Grid;
-
     public bool IsRaining = false;
     public float amountOfTimeItIsRaining;
     float rainTimer = 0;
     public static float tileScale;
-    public InfluenceController ic;
-    private GameObject icgo;
     // Use this for initialization
-    void Awake()
+    void Start()
     {
-        gameObject.AddComponent<InfluenceController>();
-        gameObject.GetComponent<InfluenceController>().sg = this;
-        gameObject.GetComponent<InfluenceController>().tile = InflTile;
+        
         tile = _tile.GetComponent<TileHandler>();
         Grid = new GameObject[Width, Height];
-        prevGrid = new GameObject[Width, Height];
         for (int y = 0; y < Height; y++)
             for (int x = 0; x < Width; x++)
             { Grid[x, y]= Instantiate(_tile);
                 Grid[x, y].transform.position = new Vector3(x, y)* tile.scale + transform.position;
-                prevGrid[x, y] = Grid[x, y];
             }
         tileScale = tile.scale;
-        GenerateForest(5);
-        //GenerateRivers();
-        GeneratePlateau(5);
-        bollie = true;
-        while (bollie)
-        {
-            int dingen = 0;
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                {
-                    prevGrid[x, y] = Grid[x, y];
-                    Grid[x, y].GetComponent<TileHandler>().checkAllValues(new Point(x, y), Grid, IsRaining);
-
-                }
-
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                {
-                    if (prevGrid[x, y] == Grid[x, y])
-                    {
-                        dingen++;
-
-                    }
-
-            }
-            if(dingen == Width*Height)
-            {
-                bollie = false;
-            }
-        
-        }
+        GenerateForest(3);
     }
 
     // Update is called once per frame
@@ -104,29 +60,8 @@ public class StartGrid : MonoBehaviour {
                 rainMaker.GetComponent<ParticleSystem>().Stop();
             }
         }
-        UpdateTimer -= Time.deltaTime;
-        if (UpdateTimer < 0)
-        {
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                {
-                    Grid[x, y].GetComponent<TileHandler>().checkAllValues(new Point(x, y), Grid, IsRaining);
-                }
-            UpdateTimer = UpdateTime;
-        }
 	}
     #region mapgeneration
-    void GeneratePlateau(int amount)
-    {
-        for (int i = 0; i < amount; i++)
-        {
-            Vector2 startPoint = new Vector2((int)Random.Range(0, (Width - 1)), (int)Random.Range(0, (Height - 1)));
-            print(startPoint);
-            Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.plateau);
-            pastVectors = new List<Vector2>();
-            SpreadTiles(startPoint, BTT.plateau, 1.3f);
-        }
-    }
     void GenerateForest(int amount)
     {
         for (int i = 0; i < amount; i++)
@@ -134,9 +69,10 @@ public class StartGrid : MonoBehaviour {
             //Vector2[] Points;
             //int[] Chance;
             Vector2 startPoint = new Vector2((int)Random.Range(0, (Width - 1)), (int)Random.Range(0, (Height - 1)));
+            print(startPoint);
             Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.bos);
             pastVectors = new List<Vector2>();
-            SpreadTiles(startPoint, BTT.bos, 1.1f);
+            SpreadTiles(startPoint, BTT.bos, 0.8f);
            /* for (int x = (int)startPoint.x -1; x <= startPoint.x +1; x++)
                 for (int y = (int)startPoint.y-1; y <= startPoint.y +1; y++)
                 {
@@ -180,13 +116,11 @@ public class StartGrid : MonoBehaviour {
             {
             case 0: // place stone move
                 {
-                    if (PlayerHandler.manaCount > 100)
-                    {
-                        Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
-                        PlayerHandler.manaCount -= 100;
-                    }
-                    else
-                    { } // go fuck your self u sun of a beach
+<<<<<<< Updated upstream
+                    Grid[(int)startPoint.x,(int)startPoint.y].GetComponent<TileHandler>().SpecialProps[abilityType] = true;
+=======
+                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
+>>>>>>> Stashed changes
                     break;
                     
                 }
@@ -199,23 +133,36 @@ public class StartGrid : MonoBehaviour {
                                 continue;
                             if (x == startPoint.x - 2 || x == startPoint.x + 2 || y == startPoint.y - 2 || y == startPoint.y + 2)
                             {
+<<<<<<< Updated upstream
+                                Grid[x,y].GetComponent<TileHandler>().SpecialProps[1] = true;
+                                Grid[x,y].GetComponent<TileHandler>().SpecialProps[5] = true;
+=======
                                 Grid[x,y].GetComponent<TileHandler>().RenderSpecialProperty(1,true);
                                 Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(4, true);
+>>>>>>> Stashed changes
                             }
                             else if (x == startPoint.x - 1 || x == startPoint.x + 1 || y == startPoint.y - 1 || y == startPoint.y + 1)
                             {
-                                Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(0,true);
+                                Grid[x,y].GetComponent<TileHandler>().SpecialProps[0] = true;
                             }
                             else
                             {
+<<<<<<< Updated upstream
+                                Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().SpecialProps[5] = true;
+=======
                                 Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(7, true);
+>>>>>>> Stashed changes
                             }
                         }
                     break;
                 }
             case 5:
                 {
+<<<<<<< Updated upstream
+                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().SpecialProps[abilityType] = true;
+=======
                     Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(4,true);
+>>>>>>> Stashed changes
                     break;
                 }
             case 6: // Change area to forest
@@ -226,7 +173,7 @@ public class StartGrid : MonoBehaviour {
                             if (x < 0 || x >= Width || y < 0 || y >= Height)
                                 continue;
                             Grid[x, y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.bos);
-
+                            print("test");
                         }
                             break;
                 }
@@ -258,7 +205,7 @@ public class StartGrid : MonoBehaviour {
                                     found = true;
                                     tempList.Add(new Vector2(x, y));
                                 }
-                                else if (z == 2 && Grid[x, y].GetComponent<TileHandler>().steen==true)//is a rock
+                                else if (z == 2 && Grid[x, y].GetComponent<TileHandler>().SpecialProps[0]==true)//is a rock
                                 {
                                     found = true;
                                     tempList.Add(new Vector2(x, y));
