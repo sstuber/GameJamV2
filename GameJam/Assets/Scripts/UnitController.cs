@@ -14,6 +14,7 @@ public class UnitController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //target = influenceController.GetBestTile();
+        /*
         Point currentTile = StartGrid.PositionToGridIndex(transform.position);
         target = influenceController.GetBestTile(currentTile.x, currentTile.y);
         print(currentTile.x + " " + currentTile.y + " " + target);
@@ -22,6 +23,6 @@ public class UnitController : MonoBehaviour {
         float distance = (target - transform.position).magnitude;
         if (distance >= speed) {
             transform.position += (target - transform.position).normalized * speed;
-        }
+        }*/
 	}
 }
