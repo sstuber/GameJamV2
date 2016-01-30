@@ -13,6 +13,7 @@ public class PlayerHandler : MonoBehaviour {
     public GameObject Unit1;
     public GameObject Unit2;
     public GameObject Unit3;
+    public GameObject Tower;
 
 	// Use this for initialization
 	void Start () {
@@ -63,6 +64,9 @@ public class PlayerHandler : MonoBehaviour {
             UnitCounts[2].Add(tempObj);
 
         }
+        Tower = Instantiate(Tower);
+        Tower.GetComponent<TowerHandler>().Position = new Point((int)((Player * (startGrid.Width - 1)*2) * StartGrid.tileScale), (int)(startGrid.Height*StartGrid.tileScale));
+        Tower.GetComponent<TowerHandler>().player = Player;
 
     }
 
