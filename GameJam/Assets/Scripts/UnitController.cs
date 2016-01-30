@@ -2,27 +2,32 @@
 using System.Collections;
 
 public class UnitController : MonoBehaviour {
-
+    public Vector2 StartPosition; 
 	// Use this for initialization
     public InfluenceController influenceController;
+    public Point currentTile;
     public Vector3 target;
+    public int player; 
     float speed = 0.01f;
 	void Start () {
-        target = transform.position + new Vector3(10, 10);
-	}
+        transform.localScale *= StartGrid.tileScale;
+        //target = transform.position;// + new Vector3(10, 10);
+        transform.position = StartGrid.GridIndexToPosition((int)StartPosition.x, (int)StartPosition.y);
+        this.influenceController = GameObject.FindGameObjectWithTag("ic").GetComponent<InfluenceController>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        //target = influenceController.GetBestTile();
-        /*
-        Point currentTile = StartGrid.PositionToGridIndex(transform.position);
-        target = influenceController.GetBestTile(currentTile.x, currentTile.y);
-        print(currentTile.x + " " + currentTile.y + " " + target);
-        float addStuff = StartGrid.tileScale / 2f;
-        target += new Vector3(addStuff, addStuff);
-        float distance = (target - transform.position).magnitude;
-        if (distance >= speed) {
-            transform.position += (target - transform.position).normalized * speed;
-        }*/
+        
+        currentTile = StartGrid.PositionToGridIndex(transform.position);
+        Point targetTile = influenceController.GetBestTile(currentTile.x, currentTile.y, player);
+        target = StartGrid.GridIndexToPosition(targetTile.x, targetTile.y) + new Vector3(0.1f, 0.1f, 0);
+        var dir = (target - transform.position).normalized;
+        dir.z = 0;
+        Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
+        rb.AddForce(dir * 100);
+       // print(currentTile.x + " " + currentTile.y + " " + targetTile.x + " " + targetTile.y);
+        //transform.position = StartGrid.GridIndexToPosition((int)StartPosition.x, (int)StartPosition.y);
+
 	}
 }

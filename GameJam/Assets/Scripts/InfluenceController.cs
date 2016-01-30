@@ -5,25 +5,28 @@ using System.Collections.Generic;
 public class InfluenceController : MonoBehaviour {
 
 	// Use this for initialization
-    public List<InfluenceMap> influenceMaps;
+    public InfluenceMap[] influenceMaps;
     public GameObject tile;
     private GameObject[,] tiles;
     public Point targetTile;
-    StartGrid sg;
-    public bool drawInfluence = true;
+    public StartGrid sg;
+    public int drawInfluenceMapIndex = 0;
+    public bool drawInfluenceMap = true;
     private bool prevDraw;
 	void Start () {
-        prevDraw = drawInfluence;
-        sg = transform.parent.gameObject.GetComponent<StartGrid>();
+        prevDraw = drawInfluenceMap;
+        //sg = transform.parent.gameObject.GetComponent<StartGrid>();
+
         tiles = new GameObject[sg.Width, sg.Height];
-        influenceMaps = new List<InfluenceMap>();
-        AddMap("goTopRight");
+        influenceMaps =  new InfluenceMap[2];
+        AddMap("player1", 0);
+        AddMap("player2", 1);
 
         for(int y = 0; y < sg.Height; ++y){
             for (int x = 0; x < sg.Width; ++x) {
-                GameObject newTile = (GameObject)Instantiate(tile, sg.Grid[x, y].transform.position + new Vector3(0,0,-1), Quaternion.identity);
+                GameObject newTile = (GameObject)Instantiate(tile, new Vector3(-4,-2,0) + new Vector3(0,0,-1), Quaternion.identity);
                 tiles[x, y] = newTile;
-                influenceMaps[0].influences[x, y] = 0;//(1 + x) * (1 + y);
+                //influenceMaps[0].influences[x, y] = 0;//(1 + x) * (1 + y);
                 tiles[x, y].transform.localScale *= StartGrid.tileScale;
             }
         }
@@ -40,30 +43,34 @@ public class InfluenceController : MonoBehaviour {
         }
     }
 
-    void ColourInfluence() {
+    void ColourInfluence(int index, Color color) {
         for (int y = 0; y < sg.Height; ++y) {
             for (int x = 0; x < sg.Width; ++x) {
                 SpriteRenderer sr = tiles[x,y].GetComponent<SpriteRenderer>();
-                float intensity = 4 * influenceMaps[0].influences[x, y] / 128f;
-                if(influenceMaps[0].influences[x,y] < 0){
+                float intensity = 4 * influenceMaps[index].influences[x, y] / 128f;
+                if (influenceMaps[index].influences[x, y] < 0) {
                     intensity *= -1f;
-                    sr.color = new Color(intensity + 0.33f, 0.33f, 0.33f, 0.75f);
+                    sr.color = color * intensity;
+                    //sr.color = new Color(intensity + 0.33f, 0.33f, 0.33f, 0.75f);
                 }
                 else
-                    sr.color = new Color(0.33f, 0.33f, intensity + 0.33f, 0.75f);
+                    sr.color = color * intensity;
+
+                    //sr.color = new Color(0.33f, 0.33f, intensity + 0.33f, 0.75f);
             }
         }
     }
 	// Update is called once per frame
 	void Update () {
-        FloodFromTile(12, 5);
+        FloodFromTile(sg.Width - 1, sg.Height / 2, 0);
+        FloodFromTile(0, sg.Height / 2, 1);
 
-        if (prevDraw != drawInfluence)
-            EnableDrawing(drawInfluence);
-        if(drawInfluence)
-            ColourInfluence();
+        if (prevDraw != drawInfluenceMap)
+            EnableDrawing(drawInfluenceMap);
+        if (drawInfluenceMap)
+            ColourInfluence(drawInfluenceMapIndex, Color.yellow);
 
-        prevDraw = drawInfluence;
+        prevDraw = drawInfluenceMap;
 	}
 
     class Tuple<T, K> {
@@ -76,14 +83,14 @@ public class InfluenceController : MonoBehaviour {
     }
 
     class PriorityQueue<T>{
-        LinkedList<Tuple<T, int>> queue;
+        LinkedList<Tuple<T, float>> queue;
 
         public PriorityQueue() {
-            queue = new LinkedList<Tuple<T, int>>();
+            queue = new LinkedList<Tuple<T, float>>();
         }
-        public void Add(T elem, int importance) {
-            
-            Tuple<T, int> newElem = new Tuple<T,int>(elem, importance);
+        public void Add(T elem, float importance) {
+
+            Tuple<T, float> newElem = new Tuple<T, float>(elem, importance);
 
             if (queue.Count == 0) {
                 queue.AddFirst(newElem);
@@ -112,11 +119,11 @@ public class InfluenceController : MonoBehaviour {
             return queue.Count;
         }
     }
-    void FloodFromTile(int x, int y) {
-        PriorityQueue<Tuple<Point,int>> pq = new PriorityQueue<Tuple<Point,int>>();
+    void FloodFromTile(int x, int y, int m) {
+        PriorityQueue<Tuple<Point, float>> pq = new PriorityQueue<Tuple<Point, float>>();
         HashSet<Point> visited = new HashSet<Point>();
 
-        pq.Add(new Tuple<Point,int>(new Point(x, y), 0), 0);
+        pq.Add(new Tuple<Point, float>(new Point(x, y), 0), 0);
         visited.Add(new Point(x, y));
         int imp = 0;
         while (pq.Count() > 0) {
@@ -124,7 +131,7 @@ public class InfluenceController : MonoBehaviour {
             var currentPoint = currentTuple.x;
             var currentDepth = currentTuple.y;
 
-            influenceMaps[0].influences[currentPoint.x, currentPoint.y] = -currentDepth;
+            influenceMaps[m].influences[currentPoint.x, currentPoint.y] = -currentDepth;
 
             for (int iy = -1; iy < 2; ++iy) {
                 for (int ix = -1; ix < 2; ++ix) {
@@ -141,9 +148,9 @@ public class InfluenceController : MonoBehaviour {
                     if (visited.Contains(neighorPoint))
                         continue;
 
-                    int neighborDepth = currentDepth + 1;
+                    float neighborDepth = currentDepth + 1;
 
-                    int importance = neighborDepth;
+                    float importance = neighborDepth;
                     var ding = sg.Grid[currentX, currentY];
                     TileHandler dong = (TileHandler)ding.GetComponent<TileHandler>();
                     //hoeveel extra blokjes omlopen vind het waard om dit te vermijden?
@@ -153,7 +160,10 @@ public class InfluenceController : MonoBehaviour {
                     if (dong.TileType == BTT.plateau)
                         importance += 4;
 
-                    pq.Add(new Tuple<Point, int>(neighorPoint, importance), importance);
+                    if (Mathf.Abs(ix) + Mathf.Abs(iy) == 2)
+                        importance *= 1.4f;
+
+                    pq.Add(new Tuple<Point, float>(neighorPoint, importance), importance);
                     visited.Add(neighorPoint);
                 }
             }
@@ -161,7 +171,7 @@ public class InfluenceController : MonoBehaviour {
         
     }
 
-    public Point GetBestTile(int x, int y){
+    public Point GetBestTile(int x, int y, int m){
         int bestX = x, bestY = y;
         float bestValue = float.MinValue;// influenceMaps[0].influences[x, y];
         for (int iy = -1; iy < 2; ++iy) {
@@ -173,7 +183,7 @@ public class InfluenceController : MonoBehaviour {
                 if (currentY < 0 || currentY >= sg.Height)
                     continue;
 
-                float currentValue = influenceMaps[0].influences[currentX, currentY];
+                float currentValue = influenceMaps[m].influences[currentX, currentY];
                 if ((currentValue * 0.99f) > bestValue) {
                     bestValue = currentValue;
                     bestX = currentX;
@@ -185,14 +195,16 @@ public class InfluenceController : MonoBehaviour {
     }
 
     private void UpdateMaps() {
+        /*
         foreach (InfluenceMap map in influenceMaps) {
             map.UpdateMap();
-        }
+        }*/
     }
 
-    private void AddMap(string mapName){
+    private void AddMap(string mapName, int index){
         InfluenceMap map = new InfluenceMap(mapName, sg.Width, sg.Height);
-        influenceMaps.Add(map);
+        //influenceMaps.Add(map);
+        influenceMaps[index] = map;
     }
     private void AddInfluence(string mapName, int x, int y, float power, int radius) {
         InfluenceMap map = findMap(mapName);

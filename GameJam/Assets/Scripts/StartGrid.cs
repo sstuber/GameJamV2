@@ -13,6 +13,8 @@ public struct Point
 
 public class StartGrid : MonoBehaviour {
     public GameObject _tile;
+    public GameObject InflTile;
+
     List<Vector2> pastVectors;
     TileHandler tile;
     public int Height, Width;
@@ -20,65 +22,38 @@ public class StartGrid : MonoBehaviour {
     public bool IsRaining = false;
     public float amountOfTimeItIsRaining;
     float rainTimer = 0;
-    float UpdateTime = 0.25f;
-    float UpdateTimer = 0.25f;
     public static float tileScale;
-
-
-    public GameObject[,] prevGrid;
-    bool bollie;
-
+    public InfluenceController ic;
+    private GameObject icgo;
     // Use this for initialization
     void Start()
     {
-        
+        gameObject.AddComponent<InfluenceController>();
+        gameObject.GetComponent<InfluenceController>().sg = this;
+        gameObject.GetComponent<InfluenceController>().tile = InflTile;
         tile = _tile.GetComponent<TileHandler>();
         Grid = new GameObject[Width, Height];
-        prevGrid = new GameObject[Width, Height];
         for (int y = 0; y < Height; y++)
             for (int x = 0; x < Width; x++)
             { Grid[x, y]= Instantiate(_tile);
                 Grid[x, y].transform.position = new Vector3(x, y)* tile.scale + transform.position;
-      //          Grid[x, y].GetComponent<TileHandler>().fireSmall = true;
-                prevGrid[x, y] = Grid[x, y];
             }
         tileScale = tile.scale;
         GenerateForest(3);
-        bollie = true;
-        while (bollie)
-        {
-            int dingen = 0;
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                {
-                    prevGrid[x, y] = Grid[x, y];
-                    Grid[x, y].GetComponent<TileHandler>().checkAllValues(new Point(x, y), Grid, IsRaining);
-
-                }
-
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                {
-                    if (prevGrid[x, y] == Grid[x, y])
-                    {
-                        dingen++;
-
-                    }
-
-            }
-            if(dingen == Width*Height)
-            {
-                bollie = false;
-            }
-        }
     }
 
     // Update is called once per frame
     public static Point PositionToGridIndex(Vector3 pos)
     {
         int x = (int)(pos.x / tileScale);
-        int y = (int)(pos.x / tileScale);
+        int y = (int)(pos.y / tileScale);
         return new Point(x, y);
+    }
+
+    public static Vector3 GridIndexToPosition(int x, int y) {
+        float vx = x * tileScale;
+        float vy = y * tileScale;
+        return new Vector3(vx, vy);
     }
     void Update () {
         if (IsRaining)// zolang regent kijk of lava naar steen moet?
@@ -87,17 +62,7 @@ public class StartGrid : MonoBehaviour {
             if (rainTimer < 0)
                 IsRaining = false;
         }
-        UpdateTimer -= Time.deltaTime;
-        if (UpdateTimer < 0)
-        {
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                {
-                    Grid[x, y].GetComponent<TileHandler>().checkAllValues(new Point(x, y), Grid, IsRaining);
-                }
-            UpdateTimer = UpdateTime;
-        }
-                }
+	}
     #region mapgeneration
     void GenerateForest(int amount)
     {
@@ -153,7 +118,13 @@ public class StartGrid : MonoBehaviour {
             {
             case 0: // place stone move
                 {
-                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeSpecialProperty(abilityType, true);
+                    if (PlayerHandler.manaCount > 100)
+                    {
+                        Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().SpecialProps[abilityType] = true;
+                        PlayerHandler.manaCount -= 100;
+                    }
+                    else
+                    { } // go fuck your self u sun of a beach
                     break;
                     
                 }
@@ -166,23 +137,23 @@ public class StartGrid : MonoBehaviour {
                                 continue;
                             if (x == startPoint.x - 2 || x == startPoint.x + 2 || y == startPoint.y - 2 || y == startPoint.y + 2)
                             {
-                                Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(1,true);
-                                Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(5, true);
+                                Grid[x,y].GetComponent<TileHandler>().SpecialProps[1] = true;
+                                Grid[x,y].GetComponent<TileHandler>().SpecialProps[5] = true;
                             }
                             else if (x == startPoint.x - 1 || x == startPoint.x + 1 || y == startPoint.y - 1 || y == startPoint.y + 1)
                             {
-                                Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(0,  true);
+                                Grid[x,y].GetComponent<TileHandler>().SpecialProps[0] = true;
                             }
                             else
                             {
-                                Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeSpecialProperty(5, true);
+                                Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().SpecialProps[5] = true;
                             }
                         }
                     break;
                 }
             case 5:
                 {
-                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeSpecialProperty(abilityType,true);
+                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().SpecialProps[abilityType] = true;
                     break;
                 }
             case 6: // Change area to forest
