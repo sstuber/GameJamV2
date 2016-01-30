@@ -21,7 +21,8 @@ public class TowerHandler : MonoBehaviour {
         {
             Lives--;
             Destroy(other.gameObject);
-            if (Lives <=0)
+            if (Lives <= 0)
+            { }
             Application.LoadLevel("GameEnd");
         }
     }
