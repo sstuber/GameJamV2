@@ -73,8 +73,19 @@ public class TileHandler : MonoBehaviour {
     {
 
         #region ForestTile
+        if (TileType == BTT.flat)
+        {
+            if (fireBig) 
+            {
+             
+                    RenderSpecialProperty(-2, false);
+                    fireBig = false;
+                
+            }
+        }
         if (TileType == BTT.bos)
         {
+            
             if (fireSmall)
             {
                 RenderSpecialProperty(6, true);
@@ -84,7 +95,7 @@ public class TileHandler : MonoBehaviour {
 
             if (lava)
             {
-               // if (!usingRandom || Random.Range(0, 100) < 55)
+               if (!usingRandom || Random.Range(0, 100) < 80)
                 {
                     RenderSpecialProperty(5, true);
                     //fireSmall = true;
@@ -95,7 +106,9 @@ public class TileHandler : MonoBehaviour {
             if (fireBig)
             {
                 ChangeBasicTileType(BTT.flat);
+
             }
+
         }
 
         #endregion
@@ -128,7 +141,7 @@ public class TileHandler : MonoBehaviour {
                 RenderSpecialProperty(-1,false);
             fireSmall = false;
             fireBig = false;
-            if (!lava && dent&&TileType!=BTT.plateau)
+            if (rain && !lava && dent&&TileType!=BTT.plateau)
             {
                 RenderSpecialProperty(2, true);
                 //river = true;
@@ -146,20 +159,24 @@ public class TileHandler : MonoBehaviour {
 
         if (river && !dent)
         {
+            RenderSpecialProperty(-2,false);
             river = false;
         }
         if (river && steen&&TileType!=BTT.plateau)
         {
+            
             RenderSpecialProperty(3, true);
             //mud = true;
         }
         if (lava && river)
         {
+            RenderSpecialProperty(-2, false);
             lava = false;
             river = false;
             if (dent)
             {
                 dent = false;
+                RenderSpecialProperty(-2, false);
             }
             else
             {
@@ -170,86 +187,117 @@ public class TileHandler : MonoBehaviour {
 
         if (lava && mud)
         {
+            RenderSpecialProperty(-1, false);
             mud = false;
         }
         
         if (dent && steen && !river)
         {
+            RenderSpecialProperty(-2, false);
             dent = false;
             steen = false;
         }
-        if (GridPosition.y < grid.GetUpperBound(1) - 1)
+
+        if (GridPosition.y < grid.GetUpperBound(1))
         {
             TileHandler above = grid[GridPosition.x, GridPosition.y + 1].GetComponent<TileHandler>();
-            if (!rain)
-            {
-                if (above.river && above.steen && !lava)
-                {
-                    RenderSpecialProperty(3, true);
-                    //this.mud = true;
-                }
-
-                else if (this.mud)
-                {
-                    RenderSpecialProperty(-1, false);
-                    this.mud = false;
-                }
-            }
-            if (this.dent && (above.river||GridPosition.y==grid.GetUpperBound(1)) && above.steen)
-            {
-                RenderSpecialProperty(2,true);
-                //this.river = true;
-
-            }
-            else if (this.river && !rain)
-            {
-                if (dent && steen)
-                    RenderSpecialProperty(-2, true);
-                else if (dent)
-                    RenderSpecialProperty(4, true);
-                else if (steen)
-                    RenderSpecialProperty(0, true);
-                else
-                    RenderSpecialProperty(-2, true);
-                this.river = false;
-            }
-            TileHandler left = grid[GridPosition.x, GridPosition.y].GetComponent<TileHandler>();
-            bool leftb = false;
-            if (GridPosition.x != 0)
-            {
-                left = grid[GridPosition.x - 1, GridPosition.y].GetComponent<TileHandler>();
-                leftb = true;
-            }
-            TileHandler right = grid[GridPosition.x, GridPosition.y].GetComponent<TileHandler>();
-            bool rightb = false;
-            if (GridPosition.x != grid.GetUpperBound(0))
-            {
-                right = grid[GridPosition.x + 1, GridPosition.y].GetComponent<TileHandler>();
-                rightb = true;
-            }
-            TileHandler below = grid[GridPosition.x, GridPosition.y].GetComponent<TileHandler>();
-            bool belowb = false;
-            if (GridPosition.y != 0)
-            {
-                below = grid[GridPosition.x, GridPosition.y - 1].GetComponent<TileHandler>();
-                belowb = true;
-            }
-            if (this.dent && ((above.lava && !above.steen) || (leftb && left.lava && !left.steen) || (rightb && right.lava && !right.steen) || (belowb && below.lava && !below.steen)))
-            {
-                RenderSpecialProperty(1, true);
-               // this.lava = true;
-            }
-
-            if (TileType==BTT.bos&&((above.lava || above.fireBig)||(leftb&&(left.lava||left.fireBig))||(rightb&&(right.lava||right.fireBig))||(belowb&&(below.lava||below.fireBig))))
-            {
-                RenderSpecialProperty(5, true);
-                //this.fireSmall = true;
-            }
-         
+            boundHandle(above, GridPosition, grid, rain);
         }
+        else
+        {
+           TileHandler above=grid[GridPosition.x,GridPosition.y].GetComponent<TileHandler>();
+           boundHandle(above, GridPosition, grid, rain);
+        }
+        
         #endregion
     }
 
+    public void boundHandle(TileHandler above, Point GridPosition, GameObject[,] grid, bool rain) 
+    {
+        if (!rain)
+        {
+            if (above.river && above.steen && !lava)
+            {
+                RenderSpecialProperty(3, true);
+                //this.mud = true;
+            }
+
+            else if (this.mud)
+            {
+                RenderSpecialProperty(-1, false);
+                this.mud = false;
+            }
+        }
+        TileHandler topleft = above;
+        bool topleftb = false;
+        int y = 0;
+        if (grid[GridPosition.x, GridPosition.y] == above)
+            y = GridPosition.y;
+        else
+            y = GridPosition.y + 1;
+        if (GridPosition.x > 0)
+        { topleft = grid[GridPosition.x - 1, y-1].GetComponent<TileHandler>(); }
+
+        TileHandler topright = above;
+        bool toprightb = false;
+        if (GridPosition.x < grid.GetUpperBound(0) - 1)
+        { topright = grid[GridPosition.x + 1, y-1].GetComponent<TileHandler>(); }
+        if (this.dent && ((above.river && !above.steen) || (topleftb && topleft.river && !topleft.steen) || (toprightb && topright.river&&!topright.steen) || GridPosition.y == grid.GetUpperBound(1)))
+        {
+            RenderSpecialProperty(2, true);
+            //this.river = true;
+
+        }
+        else if (this.river && !rain)
+        {
+            if (dent && steen)
+                RenderSpecialProperty(-2, true);
+            else if (dent){
+                //RenderSpecialProperty(-2, true);
+                RenderSpecialProperty(4, true);}
+            else if (steen)
+            {
+                //RenderSpecialProperty(-2, true);
+                RenderSpecialProperty(0, true);
+            }
+            else
+                RenderSpecialProperty(-2, true);
+            this.river = false;
+        }
+        TileHandler left = grid[GridPosition.x, GridPosition.y].GetComponent<TileHandler>();
+        bool leftb = false;
+        if (GridPosition.x != 0)
+        {
+            left = grid[GridPosition.x - 1, GridPosition.y].GetComponent<TileHandler>();
+            leftb = true;
+        }
+        TileHandler right = grid[GridPosition.x, GridPosition.y].GetComponent<TileHandler>();
+        bool rightb = false;
+        if (GridPosition.x != grid.GetUpperBound(0))
+        {
+            right = grid[GridPosition.x + 1, GridPosition.y].GetComponent<TileHandler>();
+            rightb = true;
+        }
+        TileHandler below = grid[GridPosition.x, GridPosition.y].GetComponent<TileHandler>();
+        bool belowb = false;
+        if (GridPosition.y != 0)
+        {
+            below = grid[GridPosition.x, GridPosition.y - 1].GetComponent<TileHandler>();
+            belowb = true;
+        }
+        if (this.dent && ((above.lava && !above.steen) || (leftb && left.lava && !left.steen) || (rightb && right.lava && !right.steen) || (belowb && below.lava && !below.steen)))
+        {
+            RenderSpecialProperty(1, true);
+            // this.lava = true;
+        }
+
+        if (TileType == BTT.bos && (!usingRandom || Random.Range(0, 100) < 80)&&((above.lava || above.fireBig) || (leftb && (left.lava || left.fireBig)) || (rightb && (right.lava || right.fireBig)) || (belowb && (below.lava || below.fireBig))))
+        {
+            RenderSpecialProperty(5, true);
+            //this.fireSmall = true;
+        }
+         
+    }
 
     // Update is called once per frame
     void Update () {
@@ -281,6 +329,7 @@ public class TileHandler : MonoBehaviour {
         {
             renderer2.sprite = OverlayArray[3];
             mud = true;
+            return;
         }
         else if (i == 5)
         {

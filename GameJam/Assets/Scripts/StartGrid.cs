@@ -43,6 +43,7 @@ public class StartGrid : MonoBehaviour {
             }
         tileScale = tile.scale;
         GenerateForest(3);
+        //GenerateRivers();
         bollie = true;
         while (bollie)
         {
@@ -70,7 +71,7 @@ public class StartGrid : MonoBehaviour {
                 bollie = false;
             }
         
-    }
+        }
     }
 
     // Update is called once per frame
