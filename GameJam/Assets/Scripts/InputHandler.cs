@@ -8,6 +8,9 @@ public class InputHandler : MonoBehaviour {
     int Width, Height;
     public Vector2 TileP1;
     public Vector2 TileP2;
+    public Player1Mana mana1;
+    public Player1Mana mana2;
+
 	// Use this for initialization
 	void Start () {
         grid = _Map.GetComponent<StartGrid>().Grid;
@@ -80,7 +83,13 @@ public class InputHandler : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 6);//bos
+            if (mana1.cur_Mana > 100)
+            {
+                mana1.decreasemana(100);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 6);//bos
+            }
+            else
+            { } //kutleven
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
