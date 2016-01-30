@@ -26,24 +26,21 @@ public class StartGrid : MonoBehaviour {
     public InfluenceController ic;
     private GameObject icgo;
     // Use this for initialization
-
-    void Awake() {
+    void Awake()
+    {
         gameObject.AddComponent<InfluenceController>();
         gameObject.GetComponent<InfluenceController>().sg = this;
         gameObject.GetComponent<InfluenceController>().tile = InflTile;
         tile = _tile.GetComponent<TileHandler>();
         Grid = new GameObject[Width, Height];
         for (int y = 0; y < Height; y++)
-            for (int x = 0; x < Width; x++) {
-                Grid[x, y] = Instantiate(_tile);
-                Grid[x, y].transform.position = new Vector3(x, y) * tile.scale + transform.position;
+            for (int x = 0; x < Width; x++)
+            { Grid[x, y]= Instantiate(_tile);
+                Grid[x, y].transform.position = new Vector3(x, y)* tile.scale + transform.position;
             }
         tileScale = tile.scale;
-        GenerateForest(3);
-
-    }
-    void Start()
-    {
+        GenerateForest(5);
+        GeneratePlateau(5);
     }
 
     // Update is called once per frame
@@ -68,6 +65,17 @@ public class StartGrid : MonoBehaviour {
         }
 	}
     #region mapgeneration
+    void GeneratePlateau(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 startPoint = new Vector2((int)Random.Range(0, (Width - 1)), (int)Random.Range(0, (Height - 1)));
+            print(startPoint);
+            Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.plateau);
+            pastVectors = new List<Vector2>();
+            SpreadTiles(startPoint, BTT.plateau, 1.3f);
+        }
+    }
     void GenerateForest(int amount)
     {
         for (int i = 0; i < amount; i++)
@@ -78,7 +86,7 @@ public class StartGrid : MonoBehaviour {
             print(startPoint);
             Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.bos);
             pastVectors = new List<Vector2>();
-            SpreadTiles(startPoint, BTT.bos, 0.8f);
+            SpreadTiles(startPoint, BTT.bos, 1.1f);
            /* for (int x = (int)startPoint.x -1; x <= startPoint.x +1; x++)
                 for (int y = (int)startPoint.y-1; y <= startPoint.y +1; y++)
                 {
