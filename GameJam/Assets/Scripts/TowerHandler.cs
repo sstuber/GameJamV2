@@ -23,7 +23,10 @@ public class TowerHandler : MonoBehaviour {
             Destroy(other.gameObject);
             if (Lives <= 0)
             { }
-            Application.LoadLevel("GameEnd");
+            if (player == 0)
+                Application.LoadLevel("RedEnd");
+            else
+                Application.LoadLevel("GameEnd");
         }
     }
 }
