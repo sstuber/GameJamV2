@@ -14,6 +14,6 @@ public class MenuManager : MonoBehaviour {
 	}
 
     public void HandleClick() {
-        Application.LoadLevel("MartijnTest");
+        Application.LoadLevel("Stan");
     }
 }

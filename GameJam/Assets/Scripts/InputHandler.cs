@@ -8,6 +8,9 @@ public class InputHandler : MonoBehaviour {
     int Width, Height;
     public Vector2 TileP1;
     public Vector2 TileP2;
+    public Player1Mana mana1;
+    public Player1Mana mana2;
+
 	// Use this for initialization
 	void Start () {
         grid = _Map.GetComponent<StartGrid>().Grid;
@@ -72,7 +75,11 @@ public class InputHandler : MonoBehaviour {
         #region P1 ritual keys
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 0);//steen
+            if (mana1.cur_Mana > 10)
+            {
+                mana1.decreasemana(10);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 0);//steen
+            }
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -80,25 +87,45 @@ public class InputHandler : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 6);//bos
+            if (mana1.cur_Mana > 10)
+            {
+                mana1.decreasemana(10);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 6);//bos
+            }
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 7);//regen
+            if (mana1.cur_Mana > 30)
+            {
+                mana1.decreasemana(30);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 7);//regen
+            }
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 8);//bliksem
+            if (mana1.cur_Mana > 50)
+            {
+                mana1.decreasemana(50);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 8);//bliksem
+            }
         }
         if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 4);//vulkaan
+            if (mana1.cur_Mana > 90)
+            {
+                mana1.decreasemana(90);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 4);//vulkaan
+            }
         }
         #endregion
         #region P2 ritual keys
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 0);//steen
+            if (mana2.cur_Mana > 10)
+            {
+                mana2.decreasemana(10);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 0);//steen
+            }
         }
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
@@ -106,19 +133,33 @@ public class InputHandler : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 6);//bos
+            if (mana2.cur_Mana > 10)
+            {
+                mana2.decreasemana(10);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 6);//bos
+            }
         }
         if (Input.GetKeyDown(KeyCode.Keypad4))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 7);//regen
+            if (mana2.cur_Mana > 30)
+            {
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 7);//regen
+            }
         }
         if (Input.GetKeyDown(KeyCode.Keypad5))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 8);//bliksem
+            if (mana2.cur_Mana > 50)
+            {
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 8);//bliksem
+            }
         }
         if (Input.GetKeyDown(KeyCode.Keypad6))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 4);//vulkaan
+            if (mana2.cur_Mana > 90)
+            {
+                mana2.decreasemana(90);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 4);//vulkaan
+            }
         }
         #endregion
     }
