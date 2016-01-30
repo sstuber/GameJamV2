@@ -21,6 +21,7 @@ public class InputHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        #region P1 movement
         if (Input.GetKeyDown(KeyCode.W))
         {
 
@@ -43,7 +44,8 @@ public class InputHandler : MonoBehaviour {
 
             TileP1.x = Mathf.Min(TileP1.x + 1, Width-1);
         }
-
+        #endregion
+        #region P2 movement
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
 
@@ -66,5 +68,58 @@ public class InputHandler : MonoBehaviour {
 
             TileP2.x = Mathf.Min(TileP2.x + 1, Width-1);
         }
+        #endregion
+        #region P1 ritual keys
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 0);//steen
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 5);//valkuil
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 6);//bos
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 7);//regen
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 8);//bliksem
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 4);//vulkaan
+        }
+        #endregion
+        #region P2 ritual keys
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 0);//steen
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 5);//valkuil
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 6);//bos
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 7);//regen
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 8);//bliksem
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 4);//vulkaan
+        }
+        #endregion
     }
 }
