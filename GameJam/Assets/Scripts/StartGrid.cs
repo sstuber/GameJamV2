@@ -162,7 +162,7 @@ public class StartGrid : MonoBehaviour {
             {
             case 0: // place stone move
                 {
-                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
+                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(LN.rock, true);
                     break;
                     
                 }
@@ -175,7 +175,7 @@ public class StartGrid : MonoBehaviour {
                                 continue;
                             if (x == startPoint.x - 2 || x == startPoint.x + 2 || y == startPoint.y - 2 || y == startPoint.y + 2)
                             {
-                                Grid[x,y].GetComponent<TileHandler>().RenderSpecialProperty(1,true);
+                                Grid[x,y].GetComponent<TileHandler>().RenderSpecialProperty(LN.lava,true);
                                 Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(4, true);
                             }
                             else if (x == startPoint.x - 1 || x == startPoint.x + 1 || y == startPoint.y - 1 || y == startPoint.y + 1)
@@ -184,14 +184,14 @@ public class StartGrid : MonoBehaviour {
                             }
                             else
                             {
-                                Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(7, true);
+                                Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(LN.volcano, true);
                             }
                         }
                     break;
                 }
             case 5:
                 {
-                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(4,true);
+                    Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(LN.pitfall,true);
                     break;
                 }
             case 6: // Change area to forest

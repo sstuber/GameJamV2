@@ -7,14 +7,24 @@ public enum BTT
     bos,
     plateau
 }
-
+public enum LN 
+{ 
+    fireSmall,
+    fireBig,
+    river,
+    mud,
+    lava,
+    rock,
+    pitfall,
+    volcano
+}
 
 public class TileHandler : MonoBehaviour {
     public float scale;
     public bool usingRandom;
     public GameObject overlaySprite;
     public Sprite[] OverlayArray;
-    public GameObject fireOverlaySprite;
+    public GameObject[] overlays;
     public Sprite[] SpriteArray;
     //public StartGrid scene;
     Sprite sprite;
@@ -35,12 +45,15 @@ public class TileHandler : MonoBehaviour {
     void Start () {
         this.transform.localScale *= scale;
         sprite = GetComponent<SpriteRenderer>().sprite;
-        fireOverlaySprite = Instantiate(overlaySprite);
-        fireOverlaySprite.transform.localScale *= scale;
-        fireOverlaySprite.transform.position = new Vector3(transform.position.x, transform.position.y, -0.7f);
-        overlaySprite = Instantiate(overlaySprite);
-        overlaySprite.transform.localScale *= scale;
-        overlaySprite.transform.position = new Vector3(transform.position.x, transform.position.y, -0.5f);
+        overlays = new GameObject[8];
+        for (int i = 0; i < 7; i++)
+        {
+            overlays[i] = Instantiate(overlaySprite);
+            overlaySprite.transform.position = new Vector3(transform.position.x, transform.position.y, -0.1f - (i / 10));
+            overlaySprite.transform.localScale *= scale;
+            overlaySprite.GetComponent<SpriteRenderer>().sprite = OverlayArray[i];
+            overlaySprite.GetComponent<SpriteRenderer>().enabled = false;
+        }
 
 	}
 	
@@ -77,10 +90,8 @@ public class TileHandler : MonoBehaviour {
         {
             if (fireBig) 
             {
-             
-                    RenderSpecialProperty(-2, false);
-                    fireBig = false;
-                
+               RenderSpecialProperty(LN.fireBig, false);
+                   // fireBig = false; 
             }
         }
         if (TileType == BTT.bos)
@@ -88,7 +99,7 @@ public class TileHandler : MonoBehaviour {
             
             if (fireSmall)
             {
-                RenderSpecialProperty(6, true);
+                RenderSpecialProperty(LN.fireSmall, true);
 
                 //fireBig = true;
             }
@@ -97,7 +108,7 @@ public class TileHandler : MonoBehaviour {
             {
                if (!usingRandom || Random.Range(0, 100) < 80)
                 {
-                    RenderSpecialProperty(5, true);
+                    RenderSpecialProperty(LN.lava, true);
                     //fireSmall = true;
                 }
             }
@@ -116,17 +127,24 @@ public class TileHandler : MonoBehaviour {
         #region Plateau
         if (TileType == BTT.plateau)
         {
-            river = false;
+            RenderSpecialProperty(LN.river, false);
+            RenderSpecialProperty(LN.mud, false);
+            RenderSpecialProperty(LN.rock, false);
+            RenderSpecialProperty(LN.fireSmall, false);
+            RenderSpecialProperty(LN.fireBig, false);
+
+           /* river = false;
             mud = false;
             steen = false;
             fireSmall = false;
-            fireBig = false;
+            fireBig = false;*/
 
             if (dent)
             {
-                RenderSpecialProperty(0, true);
+                RenderSpecialProperty(LN.rock, true);
                 //steen = true;
-                dent = false;
+                RenderSpecialProperty(LN.pitfall, false);
+                //dent = false;
                 ChangeBasicTileType(BTT.flat);
             }
         }
@@ -137,65 +155,68 @@ public class TileHandler : MonoBehaviour {
 
         if (rain||mud)
         {
-            if (fireBig || fireSmall)
-                RenderSpecialProperty(-1,false);
-            fireSmall = false;
-            fireBig = false;
+            
+            //fireSmall = false;
+            RenderSpecialProperty(LN.fireSmall, false);
+            RenderSpecialProperty(LN.fireBig, false);
             if (rain && !lava && dent&&TileType!=BTT.plateau)
             {
-                RenderSpecialProperty(2, true);
+                RenderSpecialProperty(LN.river, true);
                 //river = true;
             }
             if (TileType != BTT.plateau)
             {
-                RenderSpecialProperty(3, true);
+                RenderSpecialProperty(LN.mud, true);
                // mud = true;
             }
         }
         if (fireBig && fireSmall)
         {
-            fireSmall = false;
+            //fireSmall = false;
+            RenderSpecialProperty(LN.fireSmall,false);
         }
 
         if (river && !dent)
         {
-            RenderSpecialProperty(-2,false);
-            river = false;
+            RenderSpecialProperty(LN.river,false);
+            //river = false;
         }
         if (river && steen&&TileType!=BTT.plateau)
         {
             
-            RenderSpecialProperty(3, true);
+            RenderSpecialProperty(LN.mud, true);
             //mud = true;
         }
         if (lava && river)
         {
-            RenderSpecialProperty(-2, false);
-            lava = false;
-            river = false;
+            RenderSpecialProperty(LN.lava, false);
+            RenderSpecialProperty(LN.river, false);
+            //lava = false;
+            //river = false;
             if (dent)
             {
-                dent = false;
-                RenderSpecialProperty(-2, false);
+                //dent = false;
+                RenderSpecialProperty(LN.pitfall, false);
             }
             else
             {
-                RenderSpecialProperty(0, true);
+                RenderSpecialProperty(LN.rock, true);
                 //steen = true;
             }
         }
 
         if (lava && mud)
         {
-            RenderSpecialProperty(-1, false);
-            mud = false;
+            RenderSpecialProperty(LN.mud, false);
+            //mud = false;
         }
         
         if (dent && steen && !river)
         {
-            RenderSpecialProperty(-2, false);
-            dent = false;
-            steen = false;
+            RenderSpecialProperty(LN.pitfall, false);
+            RenderSpecialProperty(LN.rock, false);
+           // dent = false;
+           // steen = false;
         }
 
         if (GridPosition.y < grid.GetUpperBound(1))
@@ -218,14 +239,14 @@ public class TileHandler : MonoBehaviour {
         {
             if (above.river && above.steen && !lava)
             {
-                RenderSpecialProperty(3, true);
+                RenderSpecialProperty(LN.mud, true);
                 //this.mud = true;
             }
 
-            else if (this.mud)
+            else if (mud)
             {
-                RenderSpecialProperty(-1, false);
-                this.mud = false;
+                RenderSpecialProperty(LN.mud, false);
+                //mud = false;
             }
         }
         TileHandler topleft = above;
@@ -244,25 +265,31 @@ public class TileHandler : MonoBehaviour {
         { topright = grid[GridPosition.x + 1, y-1].GetComponent<TileHandler>(); }
         if (this.dent && ((above.river && !above.steen) || (topleftb && topleft.river && !topleft.steen) || (toprightb && topright.river&&!topright.steen) || GridPosition.y == grid.GetUpperBound(1)))
         {
-            RenderSpecialProperty(2, true);
+            RenderSpecialProperty(LN.river, true);
             //this.river = true;
 
         }
         else if (this.river && !rain)
         {
             if (dent && steen)
-                RenderSpecialProperty(-2, true);
-            else if (dent){
+            {
+                RenderSpecialProperty(LN.pitfall, false);
+                RenderSpecialProperty(LN.rock, false);
+            }
+            else if (dent)
+            {
                 //RenderSpecialProperty(-2, true);
-                RenderSpecialProperty(4, true);}
+                RenderSpecialProperty(LN.pitfall, true);
+            }
             else if (steen)
             {
                 //RenderSpecialProperty(-2, true);
-                RenderSpecialProperty(0, true);
+                RenderSpecialProperty(LN.rock, true);
+                RenderSpecialProperty(LN.river, false);
             }
             else
-                RenderSpecialProperty(-2, true);
-            this.river = false;
+                RenderSpecialProperty(LN.river, false);
+            //this.river = false;
         }
         TileHandler left = grid[GridPosition.x, GridPosition.y].GetComponent<TileHandler>();
         bool leftb = false;
@@ -287,13 +314,13 @@ public class TileHandler : MonoBehaviour {
         }
         if (this.dent && ((above.lava && !above.steen) || (leftb && left.lava && !left.steen) || (rightb && right.lava && !right.steen) || (belowb && below.lava && !below.steen)))
         {
-            RenderSpecialProperty(1, true);
+            RenderSpecialProperty(LN.lava, true);
             // this.lava = true;
         }
 
         if (TileType == BTT.bos && (!usingRandom || Random.Range(0, 100) < 80)&&((above.lava || above.fireBig) || (leftb && (left.lava || left.fireBig)) || (rightb && (right.lava || right.fireBig)) || (belowb && (below.lava || below.fireBig))))
         {
-            RenderSpecialProperty(5, true);
+            RenderSpecialProperty(LN.fireSmall, true);
             //this.fireSmall = true;
         }
          
@@ -309,49 +336,60 @@ public class TileHandler : MonoBehaviour {
         ChoseBasicType(type);
 
     }
-    public void RenderSpecialProperty(int i, bool newValue)
+    public void RenderSpecialProperty(LN overlay, bool newValue)
     {
-        
-        SpriteRenderer renderer = fireOverlaySprite.GetComponent<SpriteRenderer>();
-        SpriteRenderer renderer2 = overlaySprite.GetComponent<SpriteRenderer>();
-        
-        if(i == -1)
-        {
-            renderer.sprite = null;
-            return;
-        }
-        else if(i==-2)
-        {
-            renderer2.sprite =null;
-            return;
-        }
-        else if (i == 3)
-        {
-            renderer2.sprite = OverlayArray[3];
-            mud = true;
-            return;
-        }
-        else if (i == 5)
-        {
-            renderer2.sprite = OverlayArray[5];
-            fireSmall = true;
-            return;
 
-        }
-        else if (i == 6)
+        switch (overlay)
         {
-
-            renderer2.sprite = OverlayArray[6];
-            fireBig = true;
-            return;
+            case LN.rock:
+                {
+                    overlays[0].GetComponent<SpriteRenderer>().enabled = newValue;
+                    steen = newValue;
+                    break; 
+                }
+            case LN.lava:
+                {
+                    overlays[1].GetComponent<SpriteRenderer>().enabled = newValue;
+                    lava = newValue;
+                    break;
+                }
+            case LN.river:
+                {
+                    overlays[2].GetComponent<SpriteRenderer>().enabled = newValue;
+                    river = newValue;
+                    break;
+                }
+            case LN.mud:
+                {
+                    overlays[3].GetComponent<SpriteRenderer>().enabled = newValue;
+                    mud = newValue;
+                    break;
+                }
+            case LN.pitfall:
+                {
+                    overlays[4].GetComponent<SpriteRenderer>().enabled = newValue;
+                    dent = newValue;
+                    break;
+                }
+            case LN.fireSmall:
+                {
+                    overlays[5].GetComponent<SpriteRenderer>().enabled = newValue;
+                    fireSmall = newValue;
+                    break;
+                }
+            case LN.fireBig:
+                {
+                    overlays[6].GetComponent<SpriteRenderer>().enabled = newValue;
+                    fireBig = newValue;
+                    break;
+                }
+            case LN.volcano:
+                {
+                    overlays[7].GetComponent<SpriteRenderer>().enabled = newValue;
+                    steen = newValue;
+                    break;
+                }
         }
-        else if (i == 7)
-        {
-            renderer.sprite = OverlayArray[i];
-            ChangeSpecialProperty(5, newValue);
-        }
-        renderer.sprite = OverlayArray[i];
-        ChangeSpecialProperty(i, newValue);
     }
 
     public void ChangeSpecialProperty(int i, bool newValue)
