@@ -25,7 +25,12 @@ public class UnitController : MonoBehaviour {
         var dir = (target - transform.position).normalized;
         dir.z = 0;
         Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
-        rb.AddForce(dir * 100);
+        if (currentTile.x == targetTile.x && currentTile.y == targetTile.y) {
+            rb.velocity *= 0.99f;
+        }
+        else {
+            rb.AddForce(dir * 100);
+        }
        // print(currentTile.x + " " + currentTile.y + " " + targetTile.x + " " + targetTile.y);
         //transform.position = StartGrid.GridIndexToPosition((int)StartPosition.x, (int)StartPosition.y);
 

@@ -26,20 +26,24 @@ public class StartGrid : MonoBehaviour {
     public InfluenceController ic;
     private GameObject icgo;
     // Use this for initialization
-    void Start()
-    {
+
+    void Awake() {
         gameObject.AddComponent<InfluenceController>();
         gameObject.GetComponent<InfluenceController>().sg = this;
         gameObject.GetComponent<InfluenceController>().tile = InflTile;
         tile = _tile.GetComponent<TileHandler>();
         Grid = new GameObject[Width, Height];
         for (int y = 0; y < Height; y++)
-            for (int x = 0; x < Width; x++)
-            { Grid[x, y]= Instantiate(_tile);
-                Grid[x, y].transform.position = new Vector3(x, y)* tile.scale + transform.position;
+            for (int x = 0; x < Width; x++) {
+                Grid[x, y] = Instantiate(_tile);
+                Grid[x, y].transform.position = new Vector3(x, y) * tile.scale + transform.position;
             }
         tileScale = tile.scale;
         GenerateForest(3);
+
+    }
+    void Start()
+    {
     }
 
     // Update is called once per frame

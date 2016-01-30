@@ -10,7 +10,11 @@ public class InfluenceController : MonoBehaviour {
     private GameObject[,] tiles;
     public Point targetTile;
     public StartGrid sg;
-    public int drawInfluenceMapIndex = 0;
+    public ShowPlayerInfluence showPlayerInfluence;
+    public enum ShowPlayerInfluence {
+        player1,
+        player2
+    };
     public bool drawInfluenceMap = true;
     private bool prevDraw;
 	void Start () {
@@ -24,22 +28,26 @@ public class InfluenceController : MonoBehaviour {
 
         for(int y = 0; y < sg.Height; ++y){
             for (int x = 0; x < sg.Width; ++x) {
-                GameObject newTile = (GameObject)Instantiate(tile, new Vector3(-4,-2,0) + new Vector3(0,0,-1), Quaternion.identity);
+                GameObject newTile = (GameObject)Instantiate(tile, sg.Grid[x,y].transform.position, Quaternion.identity);
                 tiles[x, y] = newTile;
-                //influenceMaps[0].influences[x, y] = 0;//(1 + x) * (1 + y);
                 tiles[x, y].transform.localScale *= StartGrid.tileScale;
             }
         }
 
         //AddInfluence("goTopRight", 100f, 0.75f, 8, 8, 4);
         //AddInfluence("goTopRight", 16, 5, 1000, 20);
-        EnableDrawing(true);
+        FloodFromTile(sg.Width - 1, sg.Height / 2, 0);
+        FloodFromTile(0, sg.Height / 2, 1);
+
+        EnableDrawing(false);
 	}
 
-    void EnableDrawing(bool enable = true) {
-        foreach (GameObject tile in tiles) {
-            SpriteRenderer sr = tile.GetComponent<SpriteRenderer>();
-            sr.enabled = enable;
+    void EnableDrawing(bool enable) {
+        for (int y = 0; y < sg.Height; ++y) {
+            for (int x = 0; x < sg.Width; ++x) {
+                SpriteRenderer sr = tiles[x, y].GetComponent<SpriteRenderer>();
+                sr.enabled = enable;
+            }
         }
     }
 
@@ -47,6 +55,7 @@ public class InfluenceController : MonoBehaviour {
         for (int y = 0; y < sg.Height; ++y) {
             for (int x = 0; x < sg.Width; ++x) {
                 SpriteRenderer sr = tiles[x,y].GetComponent<SpriteRenderer>();
+                sr.color = Color.clear;
                 float intensity = 4 * influenceMaps[index].influences[x, y] / 128f;
                 if (influenceMaps[index].influences[x, y] < 0) {
                     intensity *= -1f;
@@ -62,13 +71,23 @@ public class InfluenceController : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-        FloodFromTile(sg.Width - 1, sg.Height / 2, 0);
-        FloodFromTile(0, sg.Height / 2, 1);
+        bool newFlood1 = Time.frameCount % 10 == 1, newFlood2 = Time.frameCount % 10 == 6;
+        if (newFlood1) {
+            FloodFromTile(sg.Width - 1, sg.Height / 2, 0);
+        }
+        if (newFlood2)
+            FloodFromTile(0, sg.Height / 2, 1);
 
         if (prevDraw != drawInfluenceMap)
             EnableDrawing(drawInfluenceMap);
-        if (drawInfluenceMap)
-            ColourInfluence(drawInfluenceMapIndex, Color.yellow);
+        if (drawInfluenceMap) {
+            Color c;
+            if (showPlayerInfluence == 0)
+                c = Color.blue;
+            else
+                c = Color.red;
+            ColourInfluence((int)showPlayerInfluence, c);
+        }
 
         prevDraw = drawInfluenceMap;
 	}
