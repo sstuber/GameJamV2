@@ -5,6 +5,7 @@ public class FloatingGem : MonoBehaviour {
 
     Vector2 GemMoveSpeed;
     public GameObject Gem;
+    public Transform Castle;
     public float UpperLimit;
     public float BottomLimit;
     bool MoveGemUp;
@@ -23,13 +24,13 @@ public class FloatingGem : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Gem.GetComponent<Rigidbody2D>().position.y >= UpperLimit)
+        if (Gem.GetComponent<Rigidbody2D>().position.y >= (Castle.position.y + UpperLimit))
         {
             MoveGemUp = false;
             MoveGemDown = true;
         }
 
-        if (Gem.GetComponent<Rigidbody2D>().position.y <= BottomLimit)
+        if (Gem.GetComponent<Rigidbody2D>().position.y <= (Castle.position.y + BottomLimit))
         {
             MoveGemUp = true;
             MoveGemDown = false;
