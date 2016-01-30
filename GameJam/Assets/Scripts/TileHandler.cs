@@ -27,19 +27,20 @@ public class TileHandler : MonoBehaviour {
             case BTT.bos:
                 {
                     TileType = BTT.bos;
-                      sprite = SpriteArray[1];
+                    GetComponent<SpriteRenderer>().sprite = SpriteArray[1];
+                    print("changed to forrest");
                     break;
                 }
             case BTT.plateau:
                 {
                     TileType = BTT.plateau;
-                    sprite = SpriteArray[2];
+                    GetComponent<SpriteRenderer>().sprite = SpriteArray[2];
                     break;
                 }
             default:
                 {
                     TileType = BTT.flat;
-                    sprite = SpriteArray[0];
+                    GetComponent<SpriteRenderer>().sprite = SpriteArray[0];
                     break;
                 }
         }
