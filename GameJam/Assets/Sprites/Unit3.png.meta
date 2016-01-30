@@ -1,21 +1,21 @@
 fileFormatVersion: 2
-guid: 7a5ba1107667fd3449b6f3cf500df6bd
-timeCreated: 1454119513
+guid: 8add58ee98b9fea47910910adeae2b00
+timeCreated: 1454119745
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Unit1_0
-    21300002: Unit1_1
-    21300004: Unit1_2
-    21300006: Unit1_3
-    21300008: Unit1_4
-    21300010: Unit1_5
-    21300012: Unit1_6
-    21300014: Unit1_7
-    21300016: Unit1_8
-    21300018: Unit1_9
-    21300020: Unit1_10
-    21300022: Unit1_11
+    21300000: Unit3_0
+    21300002: Unit3_2
+    21300004: Unit3_3
+    21300006: Unit3_4
+    21300008: Unit3_5
+    21300010: Unit3_6
+    21300012: Unit3_7
+    21300014: Unit3_8
+    21300016: Unit3_1
+    21300018: Unit3_9
+    21300020: Unit3_10
+    21300022: Unit3_11
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -62,95 +62,84 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: Unit1_0
+    - name: Unit3_0
       rect:
         serializedVersion: 2
         x: 4
         y: 96
-        width: 28
+        width: 23
         height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: Unit1_1
+    - name: Unit3_2
       rect:
         serializedVersion: 2
-        x: 35
+        x: 70
         y: 96
-        width: 29
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-    - name: Unit1_2
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 96
-        width: 27
+        width: 23
         height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: Unit1_3
+    - name: Unit3_3
       rect:
         serializedVersion: 2
         x: 5
         y: 64
-        width: 23
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-    - name: Unit1_4
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 64
-        width: 24
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-    - name: Unit1_5
-      rect:
-        serializedVersion: 2
-        x: 4
-        y: 32
-        width: 23
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-    - name: Unit1_6
-      rect:
-        serializedVersion: 2
-        x: 68
-        y: 32
-        width: 23
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-    - name: Unit1_7
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 0
         width: 22
         height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: Unit1_8
+    - name: Unit3_4
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 64
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Unit3_5
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 32
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Unit3_6
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 32
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Unit3_7
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 0
+        width: 23
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Unit3_8
       rect:
         serializedVersion: 2
         x: 69
@@ -161,34 +150,45 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: Unit1_9
+    - name: Unit3_1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 96
+        width: 25
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Unit3_9
       rect:
         serializedVersion: 2
         x: 37
         y: 64
-        width: 23
+        width: 22
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: Unit1_10
+    - name: Unit3_10
       rect:
         serializedVersion: 2
         x: 37
         y: 32
-        width: 23
+        width: 24
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: Unit1_11
+    - name: Unit3_11
       rect:
         serializedVersion: 2
-        x: 37
+        x: 36
         y: 0
-        width: 23
+        width: 25
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
