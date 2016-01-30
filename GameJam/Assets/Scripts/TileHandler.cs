@@ -13,11 +13,26 @@ public class TileHandler : MonoBehaviour {
     public float scale;
     public Sprite[] SpriteArray;
     Sprite sprite;
-    BTT TileType;
-	// Use this for initialization
-	void Start () {
+    public BTT TileType;
+    // Use this for initialization
+    public bool[] SpecialProps;
+  /*  bool Stone = false;           0
+    bool Lava = false;              1
+    bool River = false;             2
+    bool Swamp = false;             3
+    bool Mud = false;               4
+    bool valkuil/trap = false;      5
+    */
+   
+
+
+    void Start () {
         this.transform.localScale *= scale;
         sprite = GetComponent<SpriteRenderer>().sprite;
+        SpecialProps = new bool[6];
+        for (int i = 0; i < SpecialProps.Length; i++)
+            SpecialProps[i] = false;
+
 	}
 	
     void ChoseBasicType(BTT type)
