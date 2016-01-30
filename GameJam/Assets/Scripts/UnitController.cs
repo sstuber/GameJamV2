@@ -5,6 +5,7 @@ public class UnitController : MonoBehaviour {
 
 	// Use this for initialization
     public InfluenceController influenceController;
+    public Point currentTile;
     public Vector3 target;
     float speed = 0.01f;
 	void Start () {
@@ -13,16 +14,13 @@ public class UnitController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //target = influenceController.GetBestTile();
-        /*
-        Point currentTile = StartGrid.PositionToGridIndex(transform.position);
-        target = influenceController.GetBestTile(currentTile.x, currentTile.y);
-        print(currentTile.x + " " + currentTile.y + " " + target);
-        float addStuff = StartGrid.tileScale / 2f;
-        target += new Vector3(addStuff, addStuff);
-        float distance = (target - transform.position).magnitude;
-        if (distance >= speed) {
-            transform.position += (target - transform.position).normalized * speed;
-        }*/
+        currentTile = StartGrid.PositionToGridIndex(transform.position);
+        Point targetTile = influenceController.GetBestTile(currentTile.x, currentTile.y);
+        target = StartGrid.GridIndexToPosition(targetTile.x, targetTile.y) + new Vector3(0.1f, 0.1f, 0);
+        var dir = (target - transform.position).normalized;
+        dir.z = 0;
+        Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
+        rb.AddForce(dir * 1000);
+        print(currentTile.x + " " + currentTile.y + " " + targetTile.x + " " + targetTile.y);
 	}
 }
