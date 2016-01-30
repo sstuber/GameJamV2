@@ -13,6 +13,8 @@ public struct Point
 
 public class StartGrid : MonoBehaviour {
     public GameObject _tile;
+    public GameObject InflTile;
+
     List<Vector2> pastVectors;
     TileHandler tile;
     public int Height, Width;
@@ -21,10 +23,14 @@ public class StartGrid : MonoBehaviour {
     public float amountOfTimeItIsRaining;
     float rainTimer = 0;
     public static float tileScale;
+    public InfluenceController ic;
+    private GameObject icgo;
     // Use this for initialization
     void Start()
     {
-        
+        gameObject.AddComponent<InfluenceController>();
+        gameObject.GetComponent<InfluenceController>().sg = this;
+        gameObject.GetComponent<InfluenceController>().tile = InflTile;
         tile = _tile.GetComponent<TileHandler>();
         Grid = new GameObject[Width, Height];
         for (int y = 0; y < Height; y++)
@@ -112,7 +118,13 @@ public class StartGrid : MonoBehaviour {
             {
             case 0: // place stone move
                 {
-                    Grid[(int)startPoint.x,(int)startPoint.y].GetComponent<TileHandler>().SpecialProps[abilityType] = true;
+                    if (PlayerHandler.manaCount > 100)
+                    {
+                        Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().SpecialProps[abilityType] = true;
+                        PlayerHandler.manaCount -= 100;
+                    }
+                    else
+                    { } // go fuck your self u sun of a beach
                     break;
                     
                 }

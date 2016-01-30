@@ -5,26 +5,28 @@ using System.Collections.Generic;
 public class InfluenceController : MonoBehaviour {
 
 	// Use this for initialization
-    public List<InfluenceMap> influenceMaps;
+    public InfluenceMap[] influenceMaps;
     public GameObject tile;
     private GameObject[,] tiles;
     public Point targetTile;
-    StartGrid sg;
+    public StartGrid sg;
     public int drawInfluenceMapIndex = 0;
     public bool drawInfluenceMap = true;
     private bool prevDraw;
 	void Start () {
         prevDraw = drawInfluenceMap;
-        sg = transform.parent.gameObject.GetComponent<StartGrid>();
+        //sg = transform.parent.gameObject.GetComponent<StartGrid>();
+
         tiles = new GameObject[sg.Width, sg.Height];
-        influenceMaps = new List<InfluenceMap>();
-        AddMap("goTopRight");
+        influenceMaps =  new InfluenceMap[2];
+        AddMap("player1", 0);
+        AddMap("player2", 1);
 
         for(int y = 0; y < sg.Height; ++y){
             for (int x = 0; x < sg.Width; ++x) {
-                GameObject newTile = (GameObject)Instantiate(tile, sg.Grid[x, y].transform.position + new Vector3(0,0,-1), Quaternion.identity);
+                GameObject newTile = (GameObject)Instantiate(tile, new Vector3(-4,-2,0) + new Vector3(0,0,-1), Quaternion.identity);
                 tiles[x, y] = newTile;
-                influenceMaps[0].influences[x, y] = 0;//(1 + x) * (1 + y);
+                //influenceMaps[0].influences[x, y] = 0;//(1 + x) * (1 + y);
                 tiles[x, y].transform.localScale *= StartGrid.tileScale;
             }
         }
@@ -60,7 +62,8 @@ public class InfluenceController : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-        FloodFromTile(12, 5);
+        FloodFromTile(sg.Width - 1, sg.Height / 2, 0);
+        FloodFromTile(0, sg.Height / 2, 1);
 
         if (prevDraw != drawInfluenceMap)
             EnableDrawing(drawInfluenceMap);
@@ -116,7 +119,7 @@ public class InfluenceController : MonoBehaviour {
             return queue.Count;
         }
     }
-    void FloodFromTile(int x, int y) {
+    void FloodFromTile(int x, int y, int m) {
         PriorityQueue<Tuple<Point, float>> pq = new PriorityQueue<Tuple<Point, float>>();
         HashSet<Point> visited = new HashSet<Point>();
 
@@ -128,7 +131,7 @@ public class InfluenceController : MonoBehaviour {
             var currentPoint = currentTuple.x;
             var currentDepth = currentTuple.y;
 
-            influenceMaps[0].influences[currentPoint.x, currentPoint.y] = -currentDepth;
+            influenceMaps[m].influences[currentPoint.x, currentPoint.y] = -currentDepth;
 
             for (int iy = -1; iy < 2; ++iy) {
                 for (int ix = -1; ix < 2; ++ix) {
@@ -168,7 +171,7 @@ public class InfluenceController : MonoBehaviour {
         
     }
 
-    public Point GetBestTile(int x, int y){
+    public Point GetBestTile(int x, int y, int m){
         int bestX = x, bestY = y;
         float bestValue = float.MinValue;// influenceMaps[0].influences[x, y];
         for (int iy = -1; iy < 2; ++iy) {
@@ -180,7 +183,7 @@ public class InfluenceController : MonoBehaviour {
                 if (currentY < 0 || currentY >= sg.Height)
                     continue;
 
-                float currentValue = influenceMaps[0].influences[currentX, currentY];
+                float currentValue = influenceMaps[m].influences[currentX, currentY];
                 if ((currentValue * 0.99f) > bestValue) {
                     bestValue = currentValue;
                     bestX = currentX;
@@ -192,14 +195,16 @@ public class InfluenceController : MonoBehaviour {
     }
 
     private void UpdateMaps() {
+        /*
         foreach (InfluenceMap map in influenceMaps) {
             map.UpdateMap();
-        }
+        }*/
     }
 
-    private void AddMap(string mapName){
+    private void AddMap(string mapName, int index){
         InfluenceMap map = new InfluenceMap(mapName, sg.Width, sg.Height);
-        influenceMaps.Add(map);
+        //influenceMaps.Add(map);
+        influenceMaps[index] = map;
     }
     private void AddInfluence(string mapName, int x, int y, float power, int radius) {
         InfluenceMap map = findMap(mapName);
