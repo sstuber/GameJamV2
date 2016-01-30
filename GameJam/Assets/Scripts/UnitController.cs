@@ -41,7 +41,7 @@ public class UnitController : MonoBehaviour {
         if (dir.x < 0 && dir.y < dir.x) animator.SetInteger("Direction", 0);
         else if (dir.x < 0) animator.SetInteger("Direction", 1);
 
-        // print(currentTile.x + " " + currentTile.y + " " + targetTile.x + " " + targetTile.y);
+        
         //transform.position = StartGrid.GridIndexToPosition((int)StartPosition.x, (int)StartPosition.y);
 
     }

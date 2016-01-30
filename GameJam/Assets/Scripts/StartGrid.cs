@@ -16,6 +16,9 @@ public class StartGrid : MonoBehaviour {
     float UpdateTimer = 0.25f;
     public GameObject[,] prevGrid;
     bool bollie;
+    public GameObject lightning;
+    public AudioClip rain;
+    public AudioClip thunder;
 
     public GameObject rainMaker;
     public GameObject _tile;
@@ -32,9 +35,14 @@ public class StartGrid : MonoBehaviour {
     public static float tileScale;
     public InfluenceController ic;
     private GameObject icgo;
+    private AudioSource source;
+    private AudioSource source2;
     // Use this for initialization
     void Awake()
     {
+        AudioSource[] audio = GetComponents<AudioSource>();
+        source = audio[0];
+        source2 = audio[1];
         gameObject.AddComponent<InfluenceController>();
         gameObject.GetComponent<InfluenceController>().sg = this;
         gameObject.GetComponent<InfluenceController>().tile = InflTile;
@@ -101,6 +109,7 @@ public class StartGrid : MonoBehaviour {
             if (rainTimer < 0)
             {
                 IsRaining = false;
+                source.Stop();
                 rainMaker.GetComponent<ParticleSystem>().Stop();
             }
         }
@@ -233,6 +242,7 @@ public class StartGrid : MonoBehaviour {
             case 7:
                 {
                     IsRaining = true;
+                    source.Play();
                     rainTimer = amountOfTimeItIsRaining;
                     rainMaker.GetComponent<ParticleSystem>().Play();
                     break;
@@ -242,23 +252,25 @@ public class StartGrid : MonoBehaviour {
                     bool found = false;
                     //Vector2 loc;
                     List<Vector2> tempList = new List<Vector2>();
-                    for (int z = 0; found==false&&z<6; z++)
-                    for (int x = (int)startPoint.x - 1; x <= startPoint.x + 1; x++)
-                        for (int y = (int)startPoint.y - 1; y <= startPoint.y + 1; y++)
-                        {
-                            if (x < 0 || x >= Width || y < 0 || y >= Height)
-                                continue;
-                                if (z==0&&Grid[x,y].GetComponent<TileHandler>().TileType==BTT.plateau)//+units
+                    for (int z = 0; found == false && z < 6; z++) {
+                        for (int x = (int)startPoint.x - 1; x <= startPoint.x + 1; x++) {
+                            for (int y = (int)startPoint.y - 1; y <= startPoint.y + 1; y++)
+                            {
+                                if (x < 0 || x >= Width || y < 0 || y >= Height)
+                                { continue; }
+                                BTT type = Grid[x, y].GetComponent<TileHandler>().TileType;
+                                print((type == BTT.plateau) + ":" + (type == BTT.bos) + ":" + (type == BTT.flat));
+                                if (z == 0 && Grid[x, y].GetComponent<TileHandler>().TileType == BTT.plateau)//+units
                                 {
                                     found = true;
-                                    tempList.Add(new Vector2(x,y));
+                                    tempList.Add(new Vector2(x, y));
                                 }
                                 else if (z == 1 && Grid[x, y].GetComponent<TileHandler>().TileType == BTT.plateau)
                                 {
                                     found = true;
                                     tempList.Add(new Vector2(x, y));
                                 }
-                                else if (z == 2 && Grid[x, y].GetComponent<TileHandler>().steen==true)//is a rock
+                                else if (z == 2 && Grid[x, y].GetComponent<TileHandler>().steen == true)//is a rock
                                 {
                                     found = true;
                                     tempList.Add(new Vector2(x, y));
@@ -278,18 +290,28 @@ public class StartGrid : MonoBehaviour {
                                     found = true;
                                     tempList.Add(new Vector2(x, y));
                                 }
-                                //TileHandler tempHandler = Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>();
-
-                                Vector2[] tempArray = tempList.ToArray();
-                                int k = (Random.Range(0, tempArray.Length));
-
-                                //tempArray[k]; doe dingen
-                                // moet nog gedaan worden wat er moet gebeuren.
-
-                                /*Lighting bolt   3x3 Kiest het ''hoogste'' doelwit
-    ie  plateau met unit -- plateau -- steen -- bos -- vechtunits op platland -- platland
-   effecten:  unit dood  -- niks    -- niks  -- bos tile krijgt vuur lv 1 -- unit dood -- niks*/
                             }
+                        }
+
+                            }
+                    //print(z);
+                    //print(found);
+                    //TileHandler tempHandler = Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>();
+
+                    //Vector2[] tempArray = tempList.ToArray();
+                    int k = (Random.Range(0, tempList.Count));
+
+                    //source2.Stop();
+                    source2.PlayOneShot(source2.clip);
+                    lightning.transform.position = gameObject.transform.position + (new Vector3(tempList[k].x, tempList[k].y, 0) * tileScale);
+                    lightning.GetComponent<ParticleSystem>().Play();
+                    //DO DAMAGE TO TILE
+                    //tempArray[k]; doe dingen
+                    // moet nog gedaan worden wat er moet gebeuren.
+
+                    /*Lighting bolt   3x3 Kiest het ''hoogste'' doelwit
+ie  plateau met unit -- plateau -- steen -- bos -- vechtunits op platland -- platland
+effecten:  unit dood  -- niks    -- niks  -- bos tile krijgt vuur lv 1 -- unit dood -- niks*/
                             break;
                 }
 
@@ -298,5 +320,5 @@ public class StartGrid : MonoBehaviour {
 
     }
     
-
+    
 }
