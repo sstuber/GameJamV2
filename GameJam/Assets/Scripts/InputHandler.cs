@@ -90,7 +90,7 @@ public class InputHandler : MonoBehaviour {
         {
             _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 8);//bliksem
         }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 4);//vulkaan
         }
@@ -116,7 +116,7 @@ public class InputHandler : MonoBehaviour {
         {
             _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 8);//bliksem
         }
-        if (Input.GetKeyDown(KeyCode.Keypad5))
+        if (Input.GetKeyDown(KeyCode.Keypad6))
         {
             _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 4);//vulkaan
         }
