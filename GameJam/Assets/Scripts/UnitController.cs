@@ -10,6 +10,7 @@ public class UnitController : MonoBehaviour
     public Vector3 target;
     public PlayerHandler p1;
     public PlayerHandler p2;
+    public GameObject arrow;
 
     public int player;
     public PlayerHandler owner, enemy;
@@ -22,7 +23,7 @@ public class UnitController : MonoBehaviour
     private Quaternion targetDeathRotation;
     private Animator animator;
     public Vector3 dir;
-    public float deadBodyTimer = 5f;
+    public float deadBodyTimer, deadBodyTimerMax;
 
     public bool alive = true;
     public enum UnitType
@@ -41,7 +42,7 @@ public class UnitController : MonoBehaviour
             targetDeathRotation = Quaternion.EulerAngles(0, 0, 90);
         }
         else {
-            targetDeathRotation = Quaternion.EulerAngles(0, 0, 270);
+            targetDeathRotation = Quaternion.EulerAngles(0, 0, -90);
         }
         transform.localScale *= StartGrid.tileScale;
         this.influenceController = GameObject.FindGameObjectWithTag("ic").GetComponent<InfluenceController>();
@@ -92,7 +93,7 @@ public class UnitController : MonoBehaviour
                 {
                     dir = (closestEnemy.transform.position - transform.position);
                     //ATTACK
-                    print(distance);
+                    //print(distance);
                     if (distance < attackRange)
                     {
                         if (attackCooldown <= 0)
@@ -108,19 +109,26 @@ public class UnitController : MonoBehaviour
                 else {
                     Point targetTile = influenceController.GetBestTile(currentTile.x, currentTile.y, player);
                     target = StartGrid.GridIndexToPosition(targetTile.x, targetTile.y) + new Vector3(0.1f, 0.1f, 0);
-                    print(currentTile.x + " " + currentTile.y + " stuff");
+                   // print(currentTile.x + " " + currentTile.y + " stuff");
                     dir = (target - transform.position);
                     if (currentTile.x == targetTile.x && currentTile.y == targetTile.y)
                     {
                         animator.speed = 0;
                         bayestenbool = true;
                     }
+
+
                 }
 
                 dir.z = 0;
                 dir = dir.normalized;
-
+                Vector3 enemytowerangle = enemy.Tower.transform.position - transform.position;
+                enemytowerangle.Normalize();
                 rb.AddForce(dir * speed);
+                rb.AddForce(enemytowerangle * speed / 25);
+
+
+    
               //  print("current tile" + currentTile.x +" "+ currentTile.y);
                 switch (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().TileType)
                 {
@@ -172,11 +180,16 @@ public class UnitController : MonoBehaviour
         }
         else {
             deadBodyTimer -= Time.deltaTime;
-            if (deadBodyTimer < 0)
-                Destroy(this);
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            sr.color *= 0.995f;
+            if (sr.color.a <= 0)
+                Destroy(gameObject);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetDeathRotation, 0.1f);
         }
+
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, 0, (sg.Width - 1) * StartGrid.tileScale), Mathf.Clamp(transform.position.y, 0, (sg.Height - 1) * StartGrid.tileScale), transform.position.z);
     }
+  
 
     private void Attack(GameObject t)
     {
@@ -208,6 +221,12 @@ public class UnitController : MonoBehaviour
     private void RangedAttack(GameObject t)
     {
         UnitController targetUnit = t.GetComponent<UnitController>();
+        var dir = t.transform.position - transform.position;
+        GameObject newArrow = (GameObject)Instantiate(arrow, transform.position + new Vector3(0, 0, -1), Quaternion.identity);
+        var ac = newArrow.GetComponent<ArrowController>();
+        ac.player = player;
+        Rigidbody2D rb = newArrow.GetComponent<Rigidbody2D>();
+        rb.AddForce(new Vector2(0, Random.Range(40, 60)) + Random.RandomRange(3.5f, 6.5f) * new Vector2(dir.x, dir.y));
         //knalluh
 
 
@@ -220,5 +239,8 @@ public class UnitController : MonoBehaviour
         CircleCollider2D cc = transform.GetComponent<CircleCollider2D>();
         cc.enabled = false;
         animator.speed = 0;
+        transform.position += new Vector3(0,0,0.5f);
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        sr.color *= 0.75f;
     }
 }

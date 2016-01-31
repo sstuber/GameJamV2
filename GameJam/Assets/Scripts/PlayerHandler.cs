@@ -24,7 +24,7 @@ public class PlayerHandler : MonoBehaviour {
 
     void CreateUnits()
     {
-        Vector2 startPosition = new Vector2(2+ Player * (startGrid.Width - 5), (startGrid.Height - 5) / 2 -5) * StartGrid.tileScale; ;
+        Vector2 startPosition = new Vector2(2+ Player * (startGrid.Width - 5), (startGrid.Height - 6) / 2 -5) * StartGrid.tileScale; ;
           //  Unit1.GetComponent<UnitController>().StartPosition = startPosition;
        //InfluenceController ic1 = 
         for (int i = 0; i < 5; i++)
@@ -38,7 +38,7 @@ public class PlayerHandler : MonoBehaviour {
             Units.Add(newUnit);
             
         }
-       startPosition = new Vector2(2 + Player * (startGrid.Width - 5), (startGrid.Height - 5) / 4 - 5) * StartGrid.tileScale;
+       startPosition = new Vector2(2 + Player * (startGrid.Width - 6), (startGrid.Height - 5) / 4 ) * StartGrid.tileScale;
         for (int i = 0; i < 5; i++)
         {
             GameObject tempObj = (GameObject)Instantiate(Unit2, startPosition + new Vector2(0, i), Quaternion.identity);
@@ -49,7 +49,7 @@ public class PlayerHandler : MonoBehaviour {
 
         }
 
-        startPosition = new Vector2(2 + Player * (startGrid.Width - 5), (startGrid.Height - 10)  ) * StartGrid.tileScale; 
+        startPosition = new Vector2(2 + Player * (startGrid.Width - 6), (startGrid.Height - 10)  ) * StartGrid.tileScale; 
         for (int i = 0; i < 5; i++)
         {
             GameObject tempObj = (GameObject)Instantiate(Unit3, startPosition + new Vector2(0, i), Quaternion.identity);

@@ -19,17 +19,21 @@ public class TowerHandler : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D other)
     {
         UnitController obj = other.gameObject.GetComponent<UnitController>();
-        if (obj.player != player)
+        if (obj != null)
         {
-            handle.Request(4);
-            Lives--;
-            Destroy(other.gameObject);
-            if (Lives <= 0)
-            { }
-            if (player == 0)
-                Application.LoadLevel("RedEnd");
-            else
-                Application.LoadLevel("GameEnd");
+
+            if (obj.player != player)
+            {
+                handle.Request(4);
+                Lives--;
+                Destroy(other.gameObject);
+                if (Lives <= 0)
+                { }
+                if (player == 0)
+                    Application.LoadLevel("RedEnd");
+                else
+                    Application.LoadLevel("GameEnd");
+            }
         }
     }
 }
