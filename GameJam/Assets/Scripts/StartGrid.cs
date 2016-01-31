@@ -21,10 +21,8 @@ public class StartGrid : MonoBehaviour {
     public AudioClip thunder;
     public AudioClip river;
     public AudioClip forest;
-
-    public PlayerHandler p1;
-    public PlayerHandler p2; 
-    
+    public AudioClip volcano;
+    public AudioClip trap;
     public AudioClip rock;
 
     public GameObject rainMaker;
@@ -221,9 +219,12 @@ public class StartGrid : MonoBehaviour {
                             {
                                 Grid[x,y].GetComponent<TileHandler>().RenderSpecialProperty(1,true);
                                 Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(4, true);
+                                
                             }
                             else if (x == startPoint.x - 1 || x == startPoint.x + 1 || y == startPoint.y - 1 || y == startPoint.y + 1)
                             {
+                                source.PlayOneShot(trap);
+                                source.PlayOneShot(volcano);
                                 Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(0,true);
                             }
                             else
@@ -236,6 +237,7 @@ public class StartGrid : MonoBehaviour {
             case 5:
                 {
                     Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(4,true);
+                    source.PlayOneShot(trap);
                     break;
                 }
             case 6: // Change area to forest
@@ -274,8 +276,15 @@ public class StartGrid : MonoBehaviour {
                                 print((type == BTT.plateau) + ":" + (type == BTT.bos) + ":" + (type == BTT.flat));
                                 if (z == 0 && Grid[x, y].GetComponent<TileHandler>().TileType == BTT.plateau)//+units
                                 {
-                                    found = true;
-                                    tempList.Add(new Vector2(x, y));
+                                    Vector3 v = StartGrid.GridIndexToPosition(x, y);
+                                    print(v);
+                                    Vector2 temp = new Vector2(tileScale / 2, tileScale / 2);
+                                    Collider2D[] units = Physics2D.OverlapAreaAll((Vector2)v + temp, (Vector2)v - temp);
+                                    if (units.Length > 0)
+                                    {
+                                        found = true;
+                                        tempList.Add(new Vector2(x, y));
+                                    }
                                 }
                                 else if (z == 1 && Grid[x, y].GetComponent<TileHandler>().TileType == BTT.plateau)
                                 {
@@ -294,8 +303,16 @@ public class StartGrid : MonoBehaviour {
                                 }
                                 else if (z == 4 && Grid[x, y].GetComponent<TileHandler>().TileType == BTT.flat)//+units
                                 {
-                                    found = true;
-                                    tempList.Add(new Vector2(x, y));
+                                    Vector3 v = StartGrid.GridIndexToPosition(x, y);
+                                    print(v);
+                                    Vector2 temp = new Vector2(tileScale / 2, tileScale / 2);
+                                    Collider2D[] units = Physics2D.OverlapAreaAll((Vector2)v+temp, (Vector2)v-temp);
+                                    if (units.Length > 0)
+                                    {
+                                        print("located units");
+                                        found = true;
+                                        tempList.Add(new Vector2(x, y));
+                                    }
                                 }
                                 else if (z == 5 && Grid[x, y].GetComponent<TileHandler>().TileType == BTT.flat)
                                 {
@@ -317,6 +334,22 @@ public class StartGrid : MonoBehaviour {
                     source.PlayOneShot(thunder);
                     lightning.transform.position = gameObject.transform.position + (new Vector3(tempList[k].x, tempList[k].y, 0) * tileScale);
                     lightning.GetComponent<ParticleSystem>().Play();
+                    Vector3 vec = StartGrid.GridIndexToPosition((int)tempList[k].x, (int)tempList[k].y);
+                    //Collider2D[] unitsToHit = Physics2D.OverlapBox(vec, new Vector3(tileScale / 2, tileScale / 2, 999));
+                   
+              
+                    Vector2 temp2 = new Vector2(tileScale / 2, tileScale / 2);
+                    Collider2D[] unitsToHit = Physics2D.OverlapAreaAll((Vector2)vec + temp2, (Vector2)vec - temp2);
+                    if (unitsToHit.Length > 0) 
+                    {
+                        foreach (Collider2D unit in unitsToHit) 
+                        {
+                            if (unit.tag == "Unit")
+                            {
+                                unit.GetComponent<UnitController>().alive = false;
+                            }
+                        }
+                    }
                     //DO DAMAGE TO TILE
                     //tempArray[k]; doe dingen
                     // moet nog gedaan worden wat er moet gebeuren.
