@@ -134,6 +134,28 @@ public class UnitController : MonoBehaviour
                         break;
                 }
 
+                TileHandler tile = sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>();
+                if (tile.lava||tile.fireBig)
+                {
+                    alive = false;
+                }
+                if (tile.river) 
+                {
+                    rb.drag *= 2;
+                }
+                if (tile.steen) 
+                {
+                    rb.drag *= 1.2f;
+                }
+                if (tile.dent)
+                {
+                    rb.drag *= 1.5f;
+                }
+                if (tile.mud) 
+                {
+                    rb.drag *= 2;
+                }
+                
                 if (bayestenbool)
                 {
                     rb.velocity *= 0.99f;
