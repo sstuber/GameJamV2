@@ -136,7 +136,7 @@ public class StartGrid : MonoBehaviour {
         for (int i = 0; i < amount; i++)
         {
             Vector2 startPoint = new Vector2((int)Random.Range(0, (Width - 1)), (int)Random.Range(0, (Height - 1)));
-            print(startPoint);
+            //print(startPoint);
             Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.plateau);
             pastVectors = new List<Vector2>();
             SpreadTiles(startPoint, BTT.plateau, 1.3f);
