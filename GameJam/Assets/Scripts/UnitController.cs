@@ -8,6 +8,9 @@ public class UnitController : MonoBehaviour
     public StartGrid sg;
     public Point currentTile;
     public Vector3 target;
+    public PlayerHandler p1;
+    public PlayerHandler p2;
+
     public int player;
     public PlayerHandler owner, enemy;
     public GameObject chasingEnemy;
@@ -105,6 +108,7 @@ public class UnitController : MonoBehaviour
                 else {
                     Point targetTile = influenceController.GetBestTile(currentTile.x, currentTile.y, player);
                     target = StartGrid.GridIndexToPosition(targetTile.x, targetTile.y) + new Vector3(0.1f, 0.1f, 0);
+                    print(currentTile.x + " " + currentTile.y + " stuff");
                     dir = (target - transform.position);
                     if (currentTile.x == targetTile.x && currentTile.y == targetTile.y)
                     {
@@ -134,7 +138,25 @@ public class UnitController : MonoBehaviour
                         break;
                 }
 
-                if (bayestenbool)
+                if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(0))
+                    rb.drag = normalDrag * 4f;
+
+                if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(1))
+                    Die();
+
+                if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(2))
+                    rb.drag = normalDrag * 2f;
+
+                if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(3))
+                    rb.drag = normalDrag * 1.3f;
+
+                if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(4))
+                    Die();
+
+                if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(6))
+                    Die();
+
+                    if (bayestenbool)
                 {
                     rb.velocity *= 0.99f;
                 }

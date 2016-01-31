@@ -21,6 +21,9 @@ public class StartGrid : MonoBehaviour {
     public AudioClip thunder;
     public AudioClip river;
     public AudioClip forest;
+
+    public PlayerHandler p1;
+    public PlayerHandler p2; 
     
     public AudioClip rock;
 
