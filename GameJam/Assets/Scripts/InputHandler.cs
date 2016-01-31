@@ -83,7 +83,11 @@ public class InputHandler : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 5);//valkuil
+            if (mana1.cur_Mana > 20)
+            {
+                mana1.decreasemana(20);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP1, 5);//valkuil
+            }
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
@@ -129,7 +133,11 @@ public class InputHandler : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
-            _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 5);//valkuil
+            if (mana2.cur_Mana > 20)
+            {
+                mana2.decreasemana(20);
+                _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 5);//valkuil
+            }
         }
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
@@ -143,6 +151,7 @@ public class InputHandler : MonoBehaviour {
         {
             if (mana2.cur_Mana > 30)
             {
+                mana2.decreasemana(30);
                 _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 7);//regen
             }
         }
@@ -150,6 +159,7 @@ public class InputHandler : MonoBehaviour {
         {
             if (mana2.cur_Mana > 50)
             {
+                mana2.decreasemana(50);
                 _Map.GetComponent<StartGrid>().RitualsToMap(TileP2, 8);//bliksem
             }
         }
