@@ -16,6 +16,7 @@ public class TileHandler : MonoBehaviour {
     public Sprite[] OverlayArray;
     public GameObject fireOverlaySprite;
     public Sprite[] SpriteArray;
+    private AudioHandler sound;
     //public StartGrid scene;
     Sprite sprite;
     public BTT TileType;
@@ -28,11 +29,11 @@ public class TileHandler : MonoBehaviour {
     public bool dent = false;   //   5
     public bool fireBig = false;
     public bool fireSmall = false; //  6
-    
-   
 
 
     void Start () {
+        GameObject obj = GameObject.FindGameObjectWithTag("Audio");
+        sound = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioHandler>();
         this.transform.localScale *= scale;
         sprite = GetComponent<SpriteRenderer>().sprite;
         fireOverlaySprite = Instantiate(overlaySprite);
@@ -96,8 +97,10 @@ public class TileHandler : MonoBehaviour {
             if (lava)
             {
                if (!usingRandom || Random.Range(0, 100) < 80)
-                {
+                {   if(fireSmall==false)
+                    sound.Request(1);
                     RenderSpecialProperty(5, true);
+                    
                     //fireSmall = true;
                 }
             }
@@ -125,6 +128,7 @@ public class TileHandler : MonoBehaviour {
             if (dent)
             {
                 RenderSpecialProperty(0, true);
+                sound.Request(3);
                 //steen = true;
                 dent = false;
                 ChangeBasicTileType(BTT.flat);
@@ -143,7 +147,10 @@ public class TileHandler : MonoBehaviour {
             fireBig = false;
             if (rain && !lava && dent&&TileType!=BTT.plateau)
             {
+                if (river == false)
+                    sound.Request(2);
                 RenderSpecialProperty(2, true);
+                
                 //river = true;
             }
             if (TileType != BTT.plateau)
@@ -244,7 +251,10 @@ public class TileHandler : MonoBehaviour {
         { topright = grid[GridPosition.x + 1, y-1].GetComponent<TileHandler>(); }
         if (this.dent && ((above.river && !above.steen) || (topleftb && topleft.river && !topleft.steen) || (toprightb && topright.river&&!topright.steen) || GridPosition.y == grid.GetUpperBound(1)))
         {
+            if (river == false)
+                sound.Request(2);
             RenderSpecialProperty(2, true);
+            
             //this.river = true;
 
         }
@@ -299,7 +309,10 @@ public class TileHandler : MonoBehaviour {
 
         if (TileType == BTT.bos && (!usingRandom || Random.Range(0, 100) < 80)&&((above.lava || above.fireBig) || (leftb && (left.lava || left.fireBig)) || (rightb && (right.lava || right.fireBig)) || (belowb && (below.lava || below.fireBig))))
         {
+            if (fireSmall == false)
+                sound.Request(1);
             RenderSpecialProperty(5, true);
+            
             //this.fireSmall = true;
         }
          

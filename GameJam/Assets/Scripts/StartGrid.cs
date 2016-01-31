@@ -19,6 +19,11 @@ public class StartGrid : MonoBehaviour {
     public GameObject lightning;
     public AudioClip rain;
     public AudioClip thunder;
+    public AudioClip river;
+    public AudioClip forest;
+    public AudioClip volcano;
+    public AudioClip trap;
+    public AudioClip rock;
 
     public GameObject rainMaker;
     public GameObject _tile;
@@ -191,7 +196,7 @@ public class StartGrid : MonoBehaviour {
             case 0: // place stone move
                 {
                     Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(abilityType, true);
-
+                    source.PlayOneShot(rock);
                     gameObject.AddComponent<Rigidbody2D>();
                     gameObject.AddComponent<CircleCollider2D>();
                     var rb = GetComponent<Rigidbody2D>();
@@ -214,9 +219,12 @@ public class StartGrid : MonoBehaviour {
                             {
                                 Grid[x,y].GetComponent<TileHandler>().RenderSpecialProperty(1,true);
                                 Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(4, true);
+                                
                             }
                             else if (x == startPoint.x - 1 || x == startPoint.x + 1 || y == startPoint.y - 1 || y == startPoint.y + 1)
                             {
+                                source.PlayOneShot(trap);
+                                source.PlayOneShot(volcano);
                                 Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(0,true);
                             }
                             else
@@ -229,10 +237,12 @@ public class StartGrid : MonoBehaviour {
             case 5:
                 {
                     Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(4,true);
+                    source.PlayOneShot(trap);
                     break;
                 }
             case 6: // Change area to forest
                 {   // startpoint is the tile in the middle
+                    source.PlayOneShot(forest);
                     for (int x = (int)startPoint.x - 1; x <= startPoint.x + 1; x++)
                         for (int y = (int)startPoint.y - 1; y <= startPoint.y + 1; y++)
                         {
