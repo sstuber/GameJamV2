@@ -21,7 +21,8 @@ public class StartGrid : MonoBehaviour {
     public AudioClip thunder;
     public AudioClip river;
     public AudioClip forest;
-    
+    public AudioClip volcano;
+    public AudioClip trap;
     public AudioClip rock;
 
     public GameObject rainMaker;
@@ -218,9 +219,12 @@ public class StartGrid : MonoBehaviour {
                             {
                                 Grid[x,y].GetComponent<TileHandler>().RenderSpecialProperty(1,true);
                                 Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(4, true);
+                                
                             }
                             else if (x == startPoint.x - 1 || x == startPoint.x + 1 || y == startPoint.y - 1 || y == startPoint.y + 1)
                             {
+                                source.PlayOneShot(trap);
+                                source.PlayOneShot(volcano);
                                 Grid[x,y].GetComponent<TileHandler>().ChangeSpecialProperty(0,true);
                             }
                             else
@@ -233,6 +237,7 @@ public class StartGrid : MonoBehaviour {
             case 5:
                 {
                     Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().RenderSpecialProperty(4,true);
+                    source.PlayOneShot(trap);
                     break;
                 }
             case 6: // Change area to forest
