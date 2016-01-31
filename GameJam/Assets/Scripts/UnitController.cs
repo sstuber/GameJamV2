@@ -143,13 +143,13 @@ public class UnitController : MonoBehaviour
                 switch (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().TileType)
                 {
                     case BTT.bos:
-                        rb.drag = normalDrag * 1.5f;
+                        rb.drag = normalDrag * 1.75f;
                         break;
                     case BTT.flat:
                         rb.drag = normalDrag;
                         break;
                     case BTT.plateau:
-                        rb.drag = normalDrag *2f;
+                        rb.drag = normalDrag *2.5f;
                         break;
                     default:
                         rb.drag = normalDrag;
@@ -157,16 +157,16 @@ public class UnitController : MonoBehaviour
                 }
 
                 if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(0))
-                    rb.drag = normalDrag * 4f;
+                    rb.drag *= 6f;
 
                 if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(1))
                     Die();
 
                 if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(2))
-                    rb.drag = normalDrag * 2f;
+                    rb.drag *= 2.5f;
 
                 if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(3))
-                    rb.drag = normalDrag * 1.3f;
+                    rb.drag *= 1.5f;
 
                 if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(4))
                     Die();

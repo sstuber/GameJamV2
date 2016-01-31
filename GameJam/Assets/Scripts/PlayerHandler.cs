@@ -31,7 +31,7 @@ public class PlayerHandler : MonoBehaviour {
         {
             //GameObject tempObj = Instantiate(Unit1);
             // tempObj.GetComponent<UnitController>().StartPosition = startPosition;
-            var newUnit = (GameObject)Instantiate(Unit1,  startPosition + new Vector2(0, i), Quaternion.identity);
+            var newUnit = (GameObject)Instantiate(Unit1,  new Vector3(startPosition.x, startPosition.y, 0) + new Vector3(0, i, -2), Quaternion.identity);
             newUnit.GetComponent<UnitController>().player = Player;
             //newUnit.GetComponent<UnitController>().influenceController = startGrid.GetComponent<InfluenceController>();
 
@@ -41,7 +41,7 @@ public class PlayerHandler : MonoBehaviour {
        startPosition = new Vector2(2 + Player * (startGrid.Width - 6), (startGrid.Height - 5) / 4 ) * StartGrid.tileScale;
         for (int i = 0; i < 5; i++)
         {
-            GameObject tempObj = (GameObject)Instantiate(Unit2, startPosition + new Vector2(0, i), Quaternion.identity);
+            GameObject tempObj = (GameObject)Instantiate(Unit2, new Vector3(startPosition.x, startPosition.y, 0) + new Vector3(0, i, -2), Quaternion.identity);
             tempObj.GetComponent<UnitController>().player = Player;
             //tempObj.GetComponent<UnitController>().influenceController = startGrid.GetComponent<InfluenceController>();
 
@@ -52,7 +52,7 @@ public class PlayerHandler : MonoBehaviour {
         startPosition = new Vector2(2 + Player * (startGrid.Width - 6), (startGrid.Height - 10)  ) * StartGrid.tileScale; 
         for (int i = 0; i < 5; i++)
         {
-            GameObject tempObj = (GameObject)Instantiate(Unit3, startPosition + new Vector2(0, i), Quaternion.identity);
+            GameObject tempObj = (GameObject)Instantiate(Unit3, new Vector3(startPosition.x, startPosition.y, 0) + new Vector3(0, i, -2), Quaternion.identity);
             tempObj.GetComponent<UnitController>().player = Player;
             //  tempObj.GetComponent<UnitController>().influenceController = startGrid.GetComponent<InfluenceController>();
 
