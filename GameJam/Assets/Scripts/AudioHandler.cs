@@ -5,6 +5,7 @@ public class AudioHandler : MonoBehaviour {
     public AudioClip water;
     public AudioClip fire;
     public AudioClip earth;
+    public AudioClip destruction;
     public AudioSource source;
 	// Use this for initialization
 	void Start () {
@@ -28,6 +29,10 @@ public class AudioHandler : MonoBehaviour {
         if (num == 3)
         {
             source.PlayOneShot(earth);
+        }
+        if (num == 4)
+        {
+            source.PlayOneShot(destruction);
         }
     }
 }
