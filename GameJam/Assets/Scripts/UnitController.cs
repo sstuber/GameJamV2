@@ -36,6 +36,16 @@ public class UnitController : MonoBehaviour
     public UnitType unitType;
     void Start()
     {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        float colorIntensity = 0.5f;
+        if(player == 0)
+        {
+            sr.color *= new Color(colorIntensity, colorIntensity, 1f);
+        }
+        else
+        {
+            sr.color *= new Color(1f, colorIntensity, colorIntensity);
+        }
         int r = Random.Range(0, 2);
         if (r == 0)
         {
@@ -225,6 +235,7 @@ public class UnitController : MonoBehaviour
         GameObject newArrow = (GameObject)Instantiate(arrow, transform.position + new Vector3(0, 0, -1), Quaternion.identity);
         var ac = newArrow.GetComponent<ArrowController>();
         ac.player = player;
+        ac.yDistance = Mathf.Abs(dir.y);
         Rigidbody2D rb = newArrow.GetComponent<Rigidbody2D>();
         rb.AddForce(new Vector2(0, Random.Range(40, 60)) + Random.RandomRange(3.5f, 6.5f) * new Vector2(dir.x, dir.y));
         //knalluh
