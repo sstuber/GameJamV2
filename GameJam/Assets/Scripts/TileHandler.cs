@@ -36,6 +36,7 @@ public class TileHandler : MonoBehaviour {
         sound = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioHandler>();
         this.transform.localScale *= scale;
         sprite = GetComponent<SpriteRenderer>().sprite;
+        //overlaySprite.GetComponent<>
         fireOverlaySprite = Instantiate(overlaySprite);
         fireOverlaySprite.transform.localScale *= scale;
         fireOverlaySprite.transform.position = new Vector3(transform.position.x, transform.position.y, -0.7f);
@@ -43,7 +44,10 @@ public class TileHandler : MonoBehaviour {
         overlaySprite.transform.localScale *= scale;
         overlaySprite.transform.position = new Vector3(transform.position.x, transform.position.y, -0.5f);
 
-	}
+        RenderSpecialProperty(-1, false);
+        RenderSpecialProperty(-2, false);
+
+    }
 	
     void ChoseBasicType(BTT type)
     {

@@ -63,8 +63,8 @@ public class StartGrid : MonoBehaviour {
             }
         tileScale = tile.scale;
         GenerateForest(5);
-        //GenerateRivers();
-        GeneratePlateau(5);
+        GeneratePlateau(3);
+       
         bollie = true;
         while (bollie)
         {
@@ -93,6 +93,9 @@ public class StartGrid : MonoBehaviour {
             }
         
         }
+        GenerateRiver(3);
+      //  GenerateStones(0.05f);
+        // GenerateRiver(4);
     }
 
     // Update is called once per frame
@@ -165,6 +168,44 @@ public class StartGrid : MonoBehaviour {
 
 
     }
+
+    void GenerateRiver(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+
+            Vector2 startPoint = new Vector2((int)(Random.Range(2, (Width - 3))), (Height - 1));
+            Vector2 endPoint = new Vector2(startPoint.x, (int)Random.Range(0, Height/2));
+
+            for (int y = (int)startPoint.y; y > endPoint.y; y--)
+            {
+                if (Grid[(int)startPoint.x, y].GetComponent<TileHandler>().TileType == BTT.plateau)
+                    Grid[(int)startPoint.x, y].GetComponent<TileHandler>().ChangeBasicTileType(BTT.flat);
+                RitualsToMap(new Vector2(startPoint.x, y), 5);
+                //Grid[(int)startPoint.x, y].GetComponent<TileHandler>().checkAllValues(new Point((int)startPoint.x, y), Grid, IsRaining);
+            }
+        }
+
+    }
+    void GenerateStones(float chance )
+    {
+
+            for (int y = 0; y < Height; y++)
+                for (int x = 2; x < Width-2; x++)
+                {
+
+                    if (Random.Range(0,1)<= chance)
+                    {
+             /*           if (Grid[x, y].GetComponent<TileHandler>().steen)
+                            continue;*/
+                        RitualsToMap(new Vector2(x, y), 0);
+                   // Grid[x, y].GetComponent<TileHandler>().steen = true;
+                    }
+                }
+
+    }
+    
+
     void SpreadTiles(Vector2 startPoint, BTT type, float chance)
     {
         //Grid[(int)startPoint.x, (int)startPoint.y].GetComponent<TileHandler>().ChangeBasicTileType(type);

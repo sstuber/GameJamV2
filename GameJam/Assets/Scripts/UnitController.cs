@@ -169,7 +169,7 @@ public class UnitController : MonoBehaviour
                     rb.drag *= 1.5f;
 
                 if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(4))
-                    Die();
+                    rb.drag = Mathf.Max(rb.drag, 2f);
 
                 if (sg.Grid[currentTile.x, currentTile.y].GetComponent<TileHandler>().GetSpecialProp(6))
                     Die();
